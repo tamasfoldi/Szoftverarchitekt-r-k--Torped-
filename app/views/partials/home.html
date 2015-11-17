@@ -1,0 +1,13 @@
+<div class="home">
+  <div class="jumbotron centered">
+    <h1>Welcome to the ngEurope sample!</h1>
+    <h2 ng-show="HomeCtrl.jwt">Your JWT is:</h2>
+    <pre ng-show="HomeCtrl.jwt" class="jwt"><code>{{ HomeCtrl.jwt }}</code></pre>
+    <pre ng-show="HomeCtrl.jwt" class="jwt"><code>{{ HomeCtrl.decodedJwt | json}}</code></pre>
+    <p>Click any of the buttons to call an API and get a response</p>
+    <p><a class="btn btn-primary btn-lg" role="button" ng-click="HomeCtrl.callAnonymousApi()">Call Anonymous API</a></p>
+    <p><a class="btn btn-primary btn-lg" role="button" ng-click="HomeCtrl.callSecuredApi()">Call Secure API</a></p>
+    <h2 ng-show="HomeCtrl.response">The response of calling the <span class="red">{{ HomeCtrl.api }}</span> API is:</h2>
+    <h3 ng-show="HomeCtrl.response">{{ HomeCtrl.response }}</h3>
+  </div>
+</div>

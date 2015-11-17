@@ -1,0 +1,55 @@
+{
+  "name": "torpedo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "angular": "^1.4.7",
+    "angular-jwt": "0.0.9",
+    "angular-local-storage": "^0.2.2",
+    "angular-storage": "0.0.13",
+    "angular-ui-router": "^0.2.15",
+    "body-parser": "^1.14.1",
+    "cors": "^2.7.1",
+    "dotenv": "^1.2.0",
+    "ejs": "^2.3.4",
+    "errorhandler": "^1.4.2",
+    "express": "^4.13.3",
+    "express-jwt": "^3.3.0",
+    "html": "0.0.10",
+    "http": "0.0.0",
+    "jade": "^1.11.0",
+    "jsonwebtoken": "^5.4.1",
+    "lodash": "^3.10.1",
+    "mongoose": "^4.2.6",
+    "morgan": "^1.6.1",
+    "passport": "^0.3.2",
+    "passport-jwt": "^1.2.1",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-concurrent": "^2.1.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-newer": "^1.1.1",
+    "grunt-nodemon": "^0.4.0",
+    "grunt-ts": "^5.1.0",
+    "grunt-tslint": "^2.5.0",
+    "tslint": "^2.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tamasfoldi/Szoftverarchitekturak-Torpedo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tamasfoldi/Szoftverarchitekturak-Torpedo/issues"
+  },
+  "homepage": "https://github.com/tamasfoldi/Szoftverarchitekturak-Torpedo#readme"
+}
