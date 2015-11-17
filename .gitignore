@@ -1,7 +1,0 @@
-node_modules/
-references.js
-references.js.map
-/app/scripts/typewriting.js
-/lib/**/*.js.map
-/app/**/*.js.map
-coverage/

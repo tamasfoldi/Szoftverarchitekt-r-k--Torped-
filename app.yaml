@@ -13,12 +13,4 @@
 #
 runtime: nodejs
 vm: true
-
-env_variables:
-  OAUTH2_CALLBACK: https://your-project-id.appspot.com/oauth2callback
-
-# Temporary workaround to allow access to Google Cloud Datastore
-beta_settings:
-  service_account_scopes: >
-    https://www.googleapis.com/auth/userinfo.email,
-    https://www.googleapis.com/auth/cloud-platform
+api_version: 1
