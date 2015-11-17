@@ -31,7 +31,9 @@ module App {
         return {
           request: function(config) {
             config.headers = config.headers || {};
+            if (localStorage.getItem("jwt") !== null) {
               config.headers["Authorization"] = "Bearer " + localStorage.getItem("jwt").substring(1, localStorage.getItem("jwt").length - 1);
+            }
             return config;
           },
           response: function(response) {

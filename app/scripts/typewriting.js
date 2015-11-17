@@ -1,4 +1,5 @@
 /// <reference path="../../../references.ts" />
+//# sourceMappingURL=IUser.js.map;/// <reference path="../../../references.ts" />
 var Controllers;
 (function (Controllers) {
     var AppCtrl = (function () {
@@ -130,7 +131,9 @@ var App;
             return {
                 request: function (config) {
                     config.headers = config.headers || {};
-                    config.headers["Authorization"] = "Bearer " + localStorage.getItem("jwt").substring(1, localStorage.getItem("jwt").length - 1);
+                    if (localStorage.getItem("jwt") !== null) {
+                        config.headers["Authorization"] = "Bearer " + localStorage.getItem("jwt").substring(1, localStorage.getItem("jwt").length - 1);
+                    }
                     return config;
                 },
                 response: function (response) {

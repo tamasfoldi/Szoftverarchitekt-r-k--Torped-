@@ -5,9 +5,22 @@ var logger = require('morgan'),
   errorhandler = require('errorhandler'),
   dotenv = require('dotenv'),
   bodyParser = require('body-parser'),
-  path = require('path');
+  path = require('path'),
+  mongoose = require('mongoose'),
+  passport = require('passport');
+
 
 var app = express();
+var db = require('./lib/config/database');
+var pass = require('./lib/config/passport');
+
+mongoose.connect(db.url, function (err) {
+  if (err) {
+    console.log('MongoDB connection error', err);
+  } else {
+    console.log('MongoDB connection successful');
+  }
+});
 
 dotenv.load();
 
@@ -31,11 +44,14 @@ app.set('views', __dirname + '/app/views');
 
 app.engine('.html', require('ejs').renderFile);
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(require('./lib/config/anonymous-routes'));
 app.use(require('./lib/config/protected-routes'));
 app.use(require('./lib/config/user-routes'));
 
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 8080;
 
 http.createServer(app).listen(port, function (err) {
   console.log('listening in http://localhost:' + port);

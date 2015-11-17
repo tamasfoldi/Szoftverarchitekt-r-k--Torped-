@@ -1,9 +1,9 @@
 {
   "name": "torpedo",
   "version": "0.0.1",
-  "description": "Homewort",
+  "description": "Homework",
   "main": "server.js",
-   "scripts": {
+  "scripts": {
     "start": "node server.js",
     "monitor": "nodemon server.js",
     "deploy": "gcloud preview app deploy app.yaml",
@@ -28,6 +28,7 @@
     "jade": "^1.11.0",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
+    "mongoose": "^4.2.6",
     "morgan": "^1.6.1",
     "passport": "^0.3.2",
     "passport-jwt": "^1.2.1",
@@ -50,7 +51,7 @@
     "type": "git",
     "url": "git+https://github.com/tamasfoldi/Szoftverarchitekturak-Torpedo.git"
   },
-   "engines": {
+  "engines": {
     "node": ">=0.12.7"
   },
   "author": "",

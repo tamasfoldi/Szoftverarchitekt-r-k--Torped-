@@ -1,3 +1,3 @@
 ﻿module.exports = {
-    url : "mongodb://localhost/typewritingApp"
+    url : "mongodb://localhost/torpedo"
 };
