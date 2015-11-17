@@ -2,6 +2,8 @@ node_modules/
 references.js
 references.js.map
 /app/scripts/typewriting.js
-/**/*.js
-/**/*.js.map
+/lib/**/*.js
+/lib/**/*.js.map
+/app/**/*.js
+/app/**/*.js.map
 coverage/
