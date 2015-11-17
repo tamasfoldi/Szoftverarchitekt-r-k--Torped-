@@ -1,7 +1,7 @@
 {
   "name": "torpedo",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Homewort",
   "main": "server.js",
    "scripts": {
     "start": "node server.js",
