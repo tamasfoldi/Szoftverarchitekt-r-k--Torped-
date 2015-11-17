@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+   "scripts": {
+    "start": "node server.js",
+    "monitor": "nodemon server.js",
+    "deploy": "gcloud preview app deploy app.yaml",
+    "lint": "jshint --exclude-path=.gitignore .",
+    "test": "npm run lint"
+  },
   "dependencies": {
     "angular": "^1.4.7",
     "angular-jwt": "0.0.9",
@@ -21,7 +28,6 @@
     "jade": "^1.11.0",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
-    "mongoose": "^4.2.6",
     "morgan": "^1.6.1",
     "passport": "^0.3.2",
     "passport-jwt": "^1.2.1",
@@ -39,9 +45,6 @@
     "grunt-ts": "^5.1.0",
     "grunt-tslint": "^2.5.0",
     "tslint": "^2.5.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
