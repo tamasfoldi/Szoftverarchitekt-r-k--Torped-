@@ -38,6 +38,7 @@ module App {
             }
           }
         });
+        
       $urlRouterProvider.otherwise("/");
 
       $httpProvider.interceptors.push(($rootScope, $q, store: angular.a0.storage.IStoreService) => {
