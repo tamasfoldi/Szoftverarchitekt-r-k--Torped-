@@ -11,13 +11,16 @@ var UserSchema = new Schema({
     required: true
   },
   about: {
-    type: String
+    type: String,
+    default: ""
   },
   gender: {
-    type: String
+    type: String,
+    default: "NONE"
   },
   picUrl: {
-    type: String
+    type: String,
+    default: "http://lorempixel.com/100/100/abstract/1"
   },
   hashedPassword: String,
   salt: String
