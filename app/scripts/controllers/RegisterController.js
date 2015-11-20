@@ -15,7 +15,7 @@ var Controllers;
                 data: this.user
             }).then(function (response) {
                 _this.store.set("jwt", response.data["id_token"]);
-                _this.state.go("home");
+                _this.state.go("user");
             }, function (error) {
                 alert(error.data);
             });

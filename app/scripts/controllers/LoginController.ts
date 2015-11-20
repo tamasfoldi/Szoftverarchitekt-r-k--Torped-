@@ -18,8 +18,8 @@ module Controllers {
         method: "POST",
         data: this.user
       }).then((response) => {
-        this.store.set("jwt", response.data["id_token"]); // care
-        this.state.go("user");
+        this.store.set("jwt", response.data["id_token"]);
+        this.state.go("user", {username: "bucicimaci"});
       }, function(error) {
         alert(error.data);
       });
