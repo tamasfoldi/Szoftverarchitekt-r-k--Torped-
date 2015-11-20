@@ -29,6 +29,7 @@
 /// <reference path="app/scripts/controllers/HomeController.ts" />
 /// <reference path="app/scripts/controllers/LoginController.ts" />
 /// <reference path="app/scripts/controllers/RegisterController.ts" />
+/// <reference path="app/scripts/controllers/UserController.ts" />
 /// <reference path="app/scripts/models/IUser.ts" />
 /// <reference path="lib/config/database.ts" />
 /// <reference path="lib/models/userSchema.ts" />

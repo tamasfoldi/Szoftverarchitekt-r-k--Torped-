@@ -3,9 +3,9 @@
 module Model {
 
   export interface IUser extends angular.resource.IResource<IUser> {
-    id?: string;
     username: string;
     password: string;
-    mail: string;
+    gender: string;
+    about: string;
   }
 }

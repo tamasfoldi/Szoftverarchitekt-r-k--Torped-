@@ -64,7 +64,7 @@ var Controllers;
                 data: this.user
             }).then(function (response) {
                 _this.store.set("jwt", response.data["id_token"]);
-                _this.state.go("home");
+                _this.state.go("user");
             }, function (error) {
                 alert(error.data);
             });
@@ -99,10 +99,41 @@ var Controllers;
     })();
     Controllers.RegCtrl = RegCtrl;
 })(Controllers || (Controllers = {}));
-//# sourceMappingURL=RegisterController.js.map;/// <reference path="../../references.ts" />
+//# sourceMappingURL=RegisterController.js.map;/// <reference path="../../../references.ts" />
+var Controllers;
+(function (Controllers) {
+    var UserCtrl = (function () {
+        function UserCtrl($http, $state) {
+            var _this = this;
+            this.http = $http;
+            this.state = $state;
+            $http({
+                url: "/users/" + this.state.params["username"],
+                method: "GET"
+            }).then(function (user) {
+                _this.user = user.data;
+            }, function (err) {
+            });
+        }
+        UserCtrl.prototype.update = function () {
+            this.http({
+                url: "/users/" + this.state.params["username"],
+                method: "PUT",
+                data: this.user
+            }).then(function () {
+                alert("Successfully updated");
+            }, function () {
+                alert("Failed to update");
+            });
+        };
+        return UserCtrl;
+    })();
+    Controllers.UserCtrl = UserCtrl;
+})(Controllers || (Controllers = {}));
+//# sourceMappingURL=UserController.js.map;/// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {
@@ -125,6 +156,19 @@ var App;
             controller: Controllers.RegCtrl,
             controllerAs: "RegCtrl",
             templateUrl: "partials/register.html"
+        })
+            .state("user", {
+            url: "/users/:username",
+            controller: Controllers.UserCtrl,
+            controllerAs: "UserCtrl",
+            templateUrl: "partials/user.html",
+            data: {
+                requiresLogin: true,
+                permissions: {
+                    only: ["user"],
+                    redirectTo: "home"
+                }
+            }
         });
         $urlRouterProvider.otherwise("/");
         $httpProvider.interceptors.push(function ($rootScope, $q, store) {
@@ -154,9 +198,21 @@ var App;
             }
         });
     })
+        .run(function (jwtHelper, store, Permission, $state) {
+        Permission.defineRole("user", function ($stateParams) {
+            var user = jwtHelper.decodeToken(store.get("jwt"));
+            if ($stateParams["username"] === user["username"]) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+    })
         .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
         .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
         .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
-        .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl]);
+        .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
+        .controller("UserCtrl", ["$http", "$location", Controllers.UserCtrl]);
 })(App || (App = {}));
 //# sourceMappingURL=app.js.map

@@ -10,6 +10,12 @@ var UserSchema = new Schema({
     unique: true,
     required: true
   },
+  about: {
+    type: String
+  },
+  gender: {
+    type: String
+  },
   hashedPassword: String,
   salt: String
 });
@@ -17,6 +23,7 @@ var UserSchema = new Schema({
 /**
  * virtuals
  */
+
 UserSchema
   .virtual("password")
   .set(function(password) {

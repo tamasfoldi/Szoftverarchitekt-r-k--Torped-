@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../references.ts" />
 module App {
-  angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule"])
+  angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission"])
     .config(($urlRouterProvider: angular.ui.IUrlRouterProvider, jwtInterceptorProvider: angular.jwt.IJwtInterceptor, $httpProvider: angular.IHttpProvider,
       $stateProvider: angular.ui.IStateProvider) => {
       $stateProvider
@@ -24,6 +24,19 @@ module App {
           controller: Controllers.RegCtrl,
           controllerAs: "RegCtrl",
           templateUrl: "partials/register.html"
+        })
+        .state("user", {
+          url: "/users/:username",
+          controller: Controllers.UserCtrl,
+          controllerAs: "UserCtrl",
+          templateUrl: "partials/user.html",
+          data: {
+            requiresLogin: true,
+            permissions: {
+              only: ["user"],
+              redirectTo: "home"
+            }
+          }
         });
       $urlRouterProvider.otherwise("/");
 
@@ -38,7 +51,7 @@ module App {
           },
           response: function(response) {
             if (response.status === 401) {
-              // handle the case where the user is not authenticated
+              // todo handle the case where the user is not authenticated
             }
             return response || $q.when(response);
           }
@@ -56,8 +69,19 @@ module App {
         }
       });
     })
+    .run((jwtHelper: angular.jwt.IJwtHelper, store: angular.a0.storage.IStoreService, Permission, $state: angular.ui.IStateService) => {
+      Permission.defineRole("user", ($stateParams: angular.ui.IStateParamsService) => {
+        var user = jwtHelper.decodeToken(store.get("jwt"));
+        if ($stateParams["username"] === user["username"]) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    })
     .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
     .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
     .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
-    .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl]);
+    .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
+    .controller("UserCtrl", ["$http", "$location", Controllers.UserCtrl]);
 }

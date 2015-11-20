@@ -1,7 +1,7 @@
 /// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {
@@ -24,6 +24,19 @@ var App;
             controller: Controllers.RegCtrl,
             controllerAs: "RegCtrl",
             templateUrl: "partials/register.html"
+        })
+            .state("user", {
+            url: "/users/:username",
+            controller: Controllers.UserCtrl,
+            controllerAs: "UserCtrl",
+            templateUrl: "partials/user.html",
+            data: {
+                requiresLogin: true,
+                permissions: {
+                    only: ["user"],
+                    redirectTo: "home"
+                }
+            }
         });
         $urlRouterProvider.otherwise("/");
         $httpProvider.interceptors.push(function ($rootScope, $q, store) {
@@ -53,9 +66,21 @@ var App;
             }
         });
     })
+        .run(function (jwtHelper, store, Permission, $state) {
+        Permission.defineRole("user", function ($stateParams) {
+            var user = jwtHelper.decodeToken(store.get("jwt"));
+            if ($stateParams["username"] === user["username"]) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+    })
         .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
         .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
         .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
-        .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl]);
+        .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
+        .controller("UserCtrl", ["$http", "$location", Controllers.UserCtrl]);
 })(App || (App = {}));
 //# sourceMappingURL=app.js.map

@@ -14,6 +14,7 @@
     "angular": "^1.4.7",
     "angular-jwt": "0.0.9",
     "angular-local-storage": "^0.2.2",
+    "angular-permission": "^1.1.1",
     "angular-storage": "0.0.13",
     "angular-ui-router": "^0.2.15",
     "body-parser": "^1.14.1",

@@ -27,7 +27,7 @@ module.exports = function (grunt) {
       },
       dist: {
         src: ['app/scripts/models/*.js', 'app/scripts/services/*.js', 'app/scripts/directives/*.js', 'app/scripts/controllers/*.js', 'app/scripts/app.js'],
-        dest: 'app/scripts/typewriting.js'
+        dest: 'app/scripts/todo.js'
       }
     },
 
