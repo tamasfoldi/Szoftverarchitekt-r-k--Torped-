@@ -7,7 +7,6 @@ module Model {
     password: string;
     gender: string;
     about: string;
-
     picUrl: string;
   }
 }
