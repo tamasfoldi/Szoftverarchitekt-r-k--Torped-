@@ -1,28 +1,34 @@
 <div class="signup center-block jumbotron">
   <form role="form">
-  <h1>Signup</h1>
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" class="form-control" id="username" ng-model="RegCtrl.user.username" placeholder="Username">
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" class="form-control" id="password" ng-model="RegCtrl.user.password" placeholder="Password">
-  </div>
-  <div class="form-group">
-    <label for="gender">Gender</label>
-    <select ng-model="RegCtrl.user.gender">
-      <option value="">Select a gender</option>
-      <option value="FEMALE">Female</option>
-      <option value="MALE">Male</option>
-    </select>
-    
-  </div>
-  <div class="form-group">
-    <label for="about">About</label>
-    <textarea ng-model="RegCtrl.user.about"></textarea>
-  </div>
-  <button type="submit" class="btn btn-default" ng-click="RegCtrl.register()">Submit</button>
-</form>
-<a ui-sref="login()">Click here to Login</a>
+    <h1>Signup</h1>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username" ng-model="RegCtrl.user.username" placeholder="Username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" ng-model="RegCtrl.user.password" placeholder="Password">
+    </div>
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <select ng-model="RegCtrl.user.gender">
+        <option value="">Select a gender</option>
+        <option value="FEMALE">Female</option>
+        <option value="MALE">Male</option>
+      </select>
+
+    </div>
+    <div class="form-group">
+      <label for="about">About</label>
+      <textarea ng-model="RegCtrl.user.about"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="picture">Profile Picture</label>
+      <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+        <input ng-model="UserCtrl.user.picUrl" type="radio" name="picture" value="http://lorempixel.com/100/100/abstract/{{i}}"><img src="http://lorempixel.com/100/100/abstract/{{i}}" />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-default" ng-click="RegCtrl.register()">Submit</button>
+  </form>
+  <a ui-sref="login()">Click here to Login</a>
 </div>

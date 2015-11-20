@@ -16,6 +16,9 @@ var UserSchema = new Schema({
   gender: {
     type: String
   },
+  picUrl: {
+    type: String
+  },
   hashedPassword: String,
   salt: String
 });

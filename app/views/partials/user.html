@@ -1,19 +1,25 @@
 <div class="signup center-block jumbotron">
   <form role="form">
-  <h1>{{ UserCtrl.user.username }}</h1>
-  <div class="form-group">
-    <label for="gender">Gender</label>
-    <select ng-model="UserCtrl.user.gender" id="gender">
-      <option value="">Select a gender</option>
-      <option value="FEMALE">Female</option>
-      <option value="MALE">Male</option>
-    </select>
-    
-  </div>
-  <div class="form-group">
-    <label for="about">About</label>
-    <textarea ng-model="UserCtrl.user.about"></textarea>
-  </div>
-  <button type="submit" class="btn btn-default" ng-click="UserCtrl.update()">Update</button>
-</form>
+    <h1>{{ UserCtrl.user.username }}</h1>
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <select ng-model="UserCtrl.user.gender" id="gender">
+        <option value="">Select a gender</option>
+        <option value="FEMALE">Female</option>
+        <option value="MALE">Male</option>
+      </select>
+
+    </div>
+    <div class="form-group">
+      <label for="about">About</label>
+      <textarea ng-model="UserCtrl.user.about"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="picture">Profile Picture</label>
+      <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+        <input ng-model="UserCtrl.user.picUrl" type="radio" name="picture" value="http://lorempixel.com/100/100/abstract/{{i}}"><img src="http://lorempixel.com/100/100/abstract/{{i}}" />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-default" ng-click="UserCtrl.update()">Update</button>
+  </form>
 </div>
