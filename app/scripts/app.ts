@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../references.ts" />
 module App {
-  angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission"])
+  angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages"])
     .config(($urlRouterProvider: angular.ui.IUrlRouterProvider, jwtInterceptorProvider: angular.jwt.IJwtInterceptor, $httpProvider: angular.IHttpProvider,
       $stateProvider: angular.ui.IStateProvider) => {
       $stateProvider
@@ -83,5 +83,16 @@ module App {
     .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
     .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
     .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
-    .controller("UserCtrl", ["$http", "$location", Controllers.UserCtrl]);
+    .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
+    .controller("MenuCtrl", ["$state", "store", Controllers.MenuCtrl])
+    .directive("sidenav", () => {
+      return {
+        restrict: "E",
+        transclude: true,
+        scope: {},
+        controller: Controllers.MenuCtrl,
+        controllerAs: "MenuCtrl",
+        templateUrl: "/partials/sidenav.html"
+      };
+    });
 }

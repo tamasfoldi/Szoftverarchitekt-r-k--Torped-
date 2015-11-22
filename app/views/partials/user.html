@@ -1,25 +1,52 @@
-<div class="signup center-block jumbotron">
-  <form role="form">
-    <h1>{{ UserCtrl.user.username }}</h1>
-    <div class="form-group">
-      <label for="gender">Gender</label>
-      <select ng-model="UserCtrl.user.gender" id="gender">
-        <option value="NONE">Select a gender</option>
-        <option value="FEMALE">Female</option>
-        <option value="MALE">Male</option>
-      </select>
+<div ng-cloak>
+  <md-toolbar class="md-theme-indigo">
+    <h2 class="md-toolbar-tools">      
+      <span>Profile</span>
+    </h2>
+  </md-toolbar>
+  <md-card ng-hide="UserCtrl.isEdit">
+    <md-card-content>
+      <img src="{{ UserCtrl.user.picUrl }}">
+      <p>
+        <b>Username: </b>{{ UserCtrl.user.username }}
+      </p>
+      <p>
+        <b>Gender: </b>{{ UserCtrl.user.gender | lowercase }}
+      </p>
+      <b>About: </b>
+      <p>{{ UserCtrl.user.about }}</p>
+      <md-button ng-click="UserCtrl.isEdit = !UserCtrl.isEdit">Click here to edit</md-button>
+    </md-card-content>
+  </md-card>
+</div>
 
-    </div>
-    <div class="form-group">
-      <label for="about">About</label>
-      <textarea ng-model="UserCtrl.user.about"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="picture">Profile Picture</label>
-      <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-        <input ng-model="UserCtrl.user.picUrl" type="radio" name="picture" value="http://lorempixel.com/100/100/abstract/{{i}}"><img src="http://lorempixel.com/100/100/abstract/{{i}}" />
-      </div>
-    </div>
-    <button type="submit" class="btn btn-default" ng-click="UserCtrl.update()">Update</button>
-  </form>
+<div ng-hide="!UserCtrl.isEdit" ng-cloak>
+  <md-card>
+    <md-card-content>
+      <form role="form">
+        <div layout="row">
+          <md-input-container style="margin-right: 10px;">
+            <label for="gender">Gender</label>
+            <md-select ng-model="UserCtrl.user.gender" id="gender">
+              <md-option value="NONE">Select a gender</md-option>
+              <md-option value="FEMALE">Female</md-option>
+              <md-option value="MALE">Male</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <md-input-container>
+          <b>About</b>
+          <textarea ng-model="UserCtrl.user.about" aria-label="about"></textarea>
+        </md-input-container>
+
+        <label for="picture">Profile Picture</label>
+        <md-radio-group ng-model="UserCtrl.user.picUrl">
+          <md-radio-button ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" name="picture" aria-label="{{i}}" value="http://lorempixel.com/100/100/abstract/{{i}}">
+            <img src="http://lorempixel.com/100/100/abstract/{{i}}" />
+          </md-radio-button>
+        </md-radio-group>
+        <md-button type="submit" class="md-raised md-primary" ng-click="UserCtrl.update();">Save</md-button>
+      </form>
+    </md-card-content>
+  </md-card>
 </div>

@@ -1,7 +1,7 @@
 /// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {
@@ -81,6 +81,17 @@ var App;
         .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
         .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
         .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
-        .controller("UserCtrl", ["$http", "$location", Controllers.UserCtrl]);
+        .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
+        .controller("MenuCtrl", ["$state", "store", Controllers.MenuCtrl])
+        .directive("sidenav", function () {
+        return {
+            restrict: "E",
+            transclude: true,
+            scope: {},
+            controller: Controllers.MenuCtrl,
+            controllerAs: "MenuCtrl",
+            templateUrl: "/partials/sidenav.html"
+        };
+    });
 })(App || (App = {}));
 //# sourceMappingURL=app.js.map

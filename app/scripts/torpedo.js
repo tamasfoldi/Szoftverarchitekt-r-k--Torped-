@@ -64,6 +64,7 @@ var Controllers;
                 data: this.user
             }).then(function (response) {
                 _this.store.set("jwt", response.data["id_token"]);
+                _this.store.set("username", _this.user.username);
                 _this.state.go("user", { username: _this.user.username });
             }, function (error) {
                 alert(error.data);
@@ -74,6 +75,18 @@ var Controllers;
     Controllers.LoginCtrl = LoginCtrl;
 })(Controllers || (Controllers = {}));
 //# sourceMappingURL=LoginController.js.map;/// <reference path="../../../references.ts" />
+var Controllers;
+(function (Controllers) {
+    var MenuCtrl = (function () {
+        function MenuCtrl($state, store) {
+            this.state = $state;
+            this.store = store;
+        }
+        return MenuCtrl;
+    })();
+    Controllers.MenuCtrl = MenuCtrl;
+})(Controllers || (Controllers = {}));
+//# sourceMappingURL=MenuController.js.map;/// <reference path="../../../references.ts" />
 var Controllers;
 (function (Controllers) {
     var RegCtrl = (function () {
@@ -103,10 +116,12 @@ var Controllers;
 var Controllers;
 (function (Controllers) {
     var UserCtrl = (function () {
-        function UserCtrl($http, $state) {
+        function UserCtrl($http, $state, $mdToast) {
             var _this = this;
             this.http = $http;
+            this.isEdit = false;
             this.state = $state;
+            this.mdToast = $mdToast;
             $http({
                 url: "/users/" + this.state.params["username"],
                 method: "GET"
@@ -116,14 +131,21 @@ var Controllers;
             });
         }
         UserCtrl.prototype.update = function () {
+            var _this = this;
             this.http({
                 url: "/users/" + this.state.params["username"],
                 method: "PUT",
                 data: this.user
             }).then(function () {
-                alert("Successfully updated");
+                _this.mdToast.show(_this.mdToast.simple()
+                    .content("Updated!")
+                    .position("top")
+                    .hideDelay(1000));
+                _this.isEdit = false;
             }, function () {
-                alert("Failed to update");
+                _this.mdToast.show(_this.mdToast.simple()
+                    .content("Failed to update!")
+                    .hideDelay(1000));
             });
         };
         return UserCtrl;
@@ -133,7 +155,7 @@ var Controllers;
 //# sourceMappingURL=UserController.js.map;/// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {
@@ -213,6 +235,17 @@ var App;
         .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
         .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
         .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
-        .controller("UserCtrl", ["$http", "$location", Controllers.UserCtrl]);
+        .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
+        .controller("MenuCtrl", ["$state", "store", Controllers.MenuCtrl])
+        .directive("sidenav", function () {
+        return {
+            restrict: "E",
+            transclude: true,
+            scope: {},
+            controller: Controllers.MenuCtrl,
+            controllerAs: "MenuCtrl",
+            templateUrl: "/partials/sidenav.html"
+        };
+    });
 })(App || (App = {}));
 //# sourceMappingURL=app.js.map

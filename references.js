@@ -26,6 +26,7 @@
 /// <reference path="app/scripts/controllers/AppController.ts" />
 /// <reference path="app/scripts/controllers/HomeController.ts" />
 /// <reference path="app/scripts/controllers/LoginController.ts" />
+/// <reference path="app/scripts/controllers/MenuController.ts" />
 /// <reference path="app/scripts/controllers/RegisterController.ts" />
 /// <reference path="app/scripts/controllers/UserController.ts" />
 /// <reference path="app/scripts/models/IUser.ts" />

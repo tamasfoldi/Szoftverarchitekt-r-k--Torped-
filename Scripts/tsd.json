@@ -6,10 +6,10 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "angularjs/angular.d.ts": {
-      "commit": "c560ba6f0f55ce6f50e9d06e37b5bc0e2b9117b0"
+      "commit": "fa04c80f4a889613b96cb4f283848c61a9f64233"
     },
     "jquery/jquery.d.ts": {
-      "commit": "c560ba6f0f55ce6f50e9d06e37b5bc0e2b9117b0"
+      "commit": "fa04c80f4a889613b96cb4f283848c61a9f64233"
     },
     "angular-local-storage/angular-local-storage.d.ts": {
       "commit": "eab2e0487e9685952db58e487d484a1c342ec670"
@@ -27,7 +27,7 @@
       "commit": "eab2e0487e9685952db58e487d484a1c342ec670"
     },
     "angular-material/angular-material.d.ts": {
-      "commit": "eab2e0487e9685952db58e487d484a1c342ec670"
+      "commit": "fa04c80f4a889613b96cb4f283848c61a9f64233"
     },
     "angular-protractor/angular-protractor.d.ts": {
       "commit": "eab2e0487e9685952db58e487d484a1c342ec670"

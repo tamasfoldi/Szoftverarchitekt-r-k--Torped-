@@ -2,10 +2,12 @@
 var Controllers;
 (function (Controllers) {
     var UserCtrl = (function () {
-        function UserCtrl($http, $state) {
+        function UserCtrl($http, $state, $mdToast) {
             var _this = this;
             this.http = $http;
+            this.isEdit = false;
             this.state = $state;
+            this.mdToast = $mdToast;
             $http({
                 url: "/users/" + this.state.params["username"],
                 method: "GET"
@@ -15,14 +17,21 @@ var Controllers;
             });
         }
         UserCtrl.prototype.update = function () {
+            var _this = this;
             this.http({
                 url: "/users/" + this.state.params["username"],
                 method: "PUT",
                 data: this.user
             }).then(function () {
-                alert("Successfully updated");
+                _this.mdToast.show(_this.mdToast.simple()
+                    .content("Updated!")
+                    .position("top")
+                    .hideDelay(1000));
+                _this.isEdit = false;
             }, function () {
-                alert("Failed to update");
+                _this.mdToast.show(_this.mdToast.simple()
+                    .content("Failed to update!")
+                    .hideDelay(1000));
             });
         };
         return UserCtrl;
