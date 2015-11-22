@@ -1,7 +1,7 @@
 /// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {

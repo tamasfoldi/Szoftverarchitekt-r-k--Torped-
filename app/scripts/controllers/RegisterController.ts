@@ -20,7 +20,7 @@ module Controllers {
         this.store.set("jwt", response.data["id_token"]);
         this.state.go("user",  {username: this.user.username});
       }, function(error) {
-        alert(error.data);
+        alert(error.data.message);
       });
     }
   }

@@ -67,7 +67,7 @@ var Controllers;
                 _this.store.set("username", _this.user.username);
                 _this.state.go("user", { username: _this.user.username });
             }, function (error) {
-                alert(error.data);
+                alert(error.data.message);
             });
         };
         return LoginCtrl;
@@ -105,7 +105,7 @@ var Controllers;
                 _this.store.set("jwt", response.data["id_token"]);
                 _this.state.go("user", { username: _this.user.username });
             }, function (error) {
-                alert(error.data);
+                alert(error.data.message);
             });
         };
         return RegCtrl;
@@ -155,7 +155,7 @@ var Controllers;
 //# sourceMappingURL=UserController.js.map;/// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {

@@ -5,17 +5,23 @@
         <span>Login</span>
       </h2>
     </md-toolbar>
-    <form>
+    <form name="LoginForm" role="form">
       <md-input-container flex>
         <label for="username">Username</label>
-        <input type="text" ng-model="LoginCtrl.user.username" id="username" focus-if>
+        <input required type="text" ng-model="LoginCtrl.user.username" id="username" name="username" focus-if>
+        <div ng-messages="LoginForm.username.$error" role="alert">
+          <div ng-message="required">You did not enter a field</div>
+        </div>
       </md-input-container>
       <md-input-container flex>
         <label for="password">Password</label>
-        <input type="password" id="password" ng-model="LoginCtrl.user.password">
+        <input required type="password" id="password" name="password" ng-model="LoginCtrl.user.password">
+        <div ng-messages="LoginForm.password.$error" role="alert">
+          <div ng-message="required">You did not enter a field</div>
+        </div>
       </md-input-container>
       <div layout layout-sm="column">
-        <md-button class="md-raised md-primary" type="submit" ng-click="LoginCtrl.login()">Submit</md-button>
+        <md-button class="md-raised md-primary" type="submit" ng-click="LoginCtrl.login()" ng-disabled="!LoginForm.$valid">Submit</md-button>
         <md-button ui-sref="register()">Click here to register</md-button>
       </div>
     </form>

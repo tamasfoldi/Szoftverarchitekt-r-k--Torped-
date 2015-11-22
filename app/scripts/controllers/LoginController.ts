@@ -22,7 +22,7 @@ module Controllers {
         this.store.set("username", this.user.username);
         this.state.go("user", {username: this.user.username});
       }, function(error) {
-        alert(error.data);
+        alert(error.data.message);
       });
     }
   }

@@ -45,7 +45,10 @@
             <img src="http://lorempixel.com/100/100/abstract/{{i}}" />
           </md-radio-button>
         </md-radio-group>
-        <md-button type="submit" class="md-raised md-primary" ng-click="UserCtrl.update();">Save</md-button>
+        <div layout="row">
+          <md-button type="submit" class="md-raised md-primary" ng-click="UserCtrl.update();">Save</md-button>
+          <md-button ng-click="UserCtrl.isEdit = !UserCtrl.isEdit">Cancel</md-button>
+        </div>
       </form>
     </md-card-content>
   </md-card>

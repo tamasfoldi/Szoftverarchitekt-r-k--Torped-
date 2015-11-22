@@ -5,14 +5,20 @@
         <span>Register</span>
       </h2>
     </md-toolbar>
-    <form role="form">
+    <form role="form" name="RegForm">
       <md-input-container flex>
         <label for="username">Username</label>
-        <input required type="text" id="username" ng-model="RegCtrl.user.username" focus-if>
+        <input required type="text" id="username" ng-model="RegCtrl.user.username" name="username" focus-if>
+        <div ng-messages="RegForm.username.$error" role="alert">
+          <div ng-message="required">You did not enter a field</div>
+        </div>
       </md-input-container>
       <md-input-container flex>
         <label for="password">Password</label>
-        <input required type="password" class="form-control" id="password" ng-model="RegCtrl.user.password">
+        <input required type="password" class="form-control" id="password" name="password" ng-model="RegCtrl.user.password">
+        <div ng-messages="RegForm.password.$error" role="alert">
+          <div ng-message="required">You did not enter a field</div>
+        </div>
       </md-input-container>
       <div layout="row">
         <md-input-container style="margin-right: 10px;">
@@ -35,7 +41,7 @@
         </md-radio-button>
       </md-radio-group>
       <div layout layout-sm="column">
-        <md-button type="submit" class="md-raised md-primary" ng-click="RegCtrl.register();">Register</md-button>
+        <md-button type="submit" class="md-raised md-primary" ng-click="RegCtrl.register();" ng-disabled="!RegForm.$valid">Register</md-button>
         <md-button ui-sref="login()">Click here to Login</md-button>
       </div>
     </form>

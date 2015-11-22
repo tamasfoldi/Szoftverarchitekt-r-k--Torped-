@@ -1,5 +1,5 @@
 
-//grunt-start
+// grunt-start
 /// <reference path="Scripts/typings/angular-jwt/angular-jwt.d.ts" />
 /// <reference path="Scripts/typings/angular-local-storage/angular-local-storage.d.ts" />
 /// <reference path="Scripts/typings/angular-material/angular-material.d.ts" />
@@ -34,4 +34,7 @@
 /// <reference path="app/scripts/models/IUser.ts" />
 /// <reference path="lib/config/database.ts" />
 /// <reference path="lib/models/userSchema.ts" />
+// grunt-end
+
+//grunt-start
 //grunt-end
