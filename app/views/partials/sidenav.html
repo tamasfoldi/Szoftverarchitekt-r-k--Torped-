@@ -7,6 +7,6 @@
         <md-button ng-click="MenuCtrl.state.go('user', {username: MenuCtrl.store.get('username')})" ng-show="MenuCtrl.store.get('jwt')">Profile</md-button>
         <md-button ng-click="MenuCtrl.state.go('login')" ng-hide="MenuCtrl.store.get('jwt')">Login</md-button>        
         <md-button ng-click="MenuCtrl.state.go('register')" ng-hide="MenuCtrl.store.get('jwt')">Register</md-button>  
-        <md-button ng-click="MenuCtrl.store.remove('jwt'); MenuCtrl.state.go('login')" ng-show="MenuCtrl.store.get('jwt')">Logout</md-button>                      
+        <md-button ng-click="MenuCtrl.store.remove('jwt'); MenuCtrl.store.remove('username'); MenuCtrl.state.go('login')" ng-show="MenuCtrl.store.get('jwt')">Logout</md-button>                      
     </md-sidenav>
 </section>
