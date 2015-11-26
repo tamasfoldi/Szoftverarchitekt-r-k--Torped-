@@ -18,3 +18,7 @@
 /// <reference path="mongoose/mongoose.d.ts" />
 /// <reference path="angular-jwt/angular-jwt.d.ts" />
 /// <reference path="angular-storage/angular-storage.d.ts" />
+/// <reference path="es6-promise/es6-promise.d.ts" />
+/// <reference path="peerjs/peerjs.d.ts" />
+/// <reference path="webrtc/MediaStream.d.ts" />
+/// <reference path="webrtc/RTCPeerConnection.d.ts" />

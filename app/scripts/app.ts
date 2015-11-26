@@ -8,10 +8,7 @@ module App {
           url: "/",
           controller: Controllers.HomeCtrl,
           controllerAs: "HomeCtrl",
-          templateUrl: "partials/home.html",
-          data: {
-            requiresLogin: true
-          }
+          templateUrl: "partials/home.html"
         })
         .state("login", {
           url: "/login",
@@ -80,7 +77,7 @@ module App {
       });
     })
     .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
-    .controller("HomeCtrl", ["$http", "store", "jwtHelper", Controllers.HomeCtrl])
+    .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", Controllers.HomeCtrl])
     .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
     .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
     .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
@@ -94,5 +91,131 @@ module App {
         controllerAs: "MenuCtrl",
         templateUrl: "/partials/sidenav.html"
       };
-    });
+    })
+    .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location",
+    function ($q, $rootScope, $sce, $location) {
+      var deferred = $q.defer();
+      // var peerKey = "7k99lrngvwle4s4i";
+      var stunURL = "stun:stun.l.google.com:19302";
+      var existingCall;
+      var existingConn;
+
+      function _resolvePeer(peer, peerLocalStream, blobURL) {
+        var peerObject = {
+          peer: peer,
+          peerLocalStream: peerLocalStream,
+          videoURL: blobURL,
+
+          // calls and connects to the given remotePeerId -- returns a DataConnection object
+          makeCall: function(remotePeerId) {
+            console.log("Initiating a call to: ", remotePeerId);
+
+            var call = peer.call(remotePeerId, peerLocalStream);
+            _setupCallEvents(call);
+
+            console.log("Initiating a data connection to: ", remotePeerId);
+
+            existingConn = peer.connect(remotePeerId, peerLocalStream);
+
+            existingConn.on("close", function() {
+              console.log("Data connection closed!");
+            });
+
+            return existingConn;
+          },
+
+          // closes the existing call and connection
+          endCall: function() {
+            _endExistingCalls();
+          }
+        };
+
+        deferred.resolve(peerObject);
+      }
+
+      function _endExistingCalls() {
+        if (existingCall) { existingCall.close(); }
+        if (existingConn) { existingConn.close(); }
+      }
+
+      function _setupCallEvents (call) {
+        // hang up on an existing call if present
+        _endExistingCalls();
+
+        existingCall = call;
+
+        // wait for MediaStream on the call, then set peer video display
+        call.on("stream", function(stream){
+          // console.log(URL.createObjectURL(stream));
+          var remoteBlobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
+          $rootScope.$emit("peerStreamReceived", remoteBlobURL);
+        });
+
+        // when either you or the other ends the call
+        call.on("close", function() {
+          console.log("You have been disconnected from ", existingCall);
+          $rootScope.$emit("callEnded", existingCall);
+
+          // hang up on any existing calls if present
+          _endExistingCalls();
+        });
+
+        call.on("error", function(err) {
+          console.log("Call Error: ", err);
+          _endExistingCalls();
+        });
+      }
+
+      // compatibility shim
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+      // peerJS object
+      // -- Peer JS CLOUD
+      // var peer = new Peer({ key: peerKey, debug: 3, config: {"iceServers": [
+      //   { url: stunURL } // Pass in optional STUN and TURN server for maximum network compatibility
+      // ]}});
+
+      // navigator.getUserMedia({audio: true, video: true}, function(stream) {
+      navigator.getUserMedia({audio: true, video: true}, function(stream) {
+        var peerLocalStream = stream;
+        var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
+        var peer = new Peer({ host: $location.host(), path: "/", port: 3000, debug: 3, config: {"iceServers": [ { url: stunURL } // pass in optional STUN and TURN server for maximum network compatibility
+        ]}});
+
+        peer.on("open", function() { _resolvePeer(peer, peerLocalStream, blobURL); });
+
+        // receiving a call -- answer automatically
+        peer.on("call", function(call){
+          console.log("Answering a call!");
+
+          call.answer(peerLocalStream);
+          _setupCallEvents(call);
+        });
+
+        // receiving a data connection
+        peer.on("connection", function(connection) {
+          console.log("Answering a connection!", connection);
+          $rootScope.$emit("peerConnectionReceived", connection);
+        });
+
+        peer.on("error", function(err){
+          console.log("ERROR! Couldn\"t connect to given peer");
+
+          $rootScope.$emit("callFailed", err);
+        });
+
+        // as convenience, add our localStream to global window object
+        console.log("Peer Connect: Stream ready: ", stream);
+        // window.localStream = stream;
+
+      }, function(){ deferred.reject("Failed to getUserMedia!"); });
+
+
+      return {
+        getPeer: function() {
+          return deferred.promise;
+        }
+      };
+
+  }]);
 }

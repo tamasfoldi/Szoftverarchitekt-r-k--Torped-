@@ -7,10 +7,13 @@ var logger = require('morgan'),
   bodyParser = require('body-parser'),
   path = require('path'),
   mongoose = require('mongoose'),
-  passport = require('passport');
+  passport = require('passport'),
+  peerPool = require('./lib/peerPool'),
+  PeerServer = require('peer').PeerServer;
 
 
 var app = express();
+var io;
 var db = require('./lib/config/database');
 var pass = require('./lib/config/passport');
 
@@ -47,12 +50,36 @@ app.engine('.html', require('ejs').renderFile);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(require('./lib/config/anonymous-routes'));
-app.use(require('./lib/config/protected-routes'));
 app.use(require('./lib/config/user-routes'));
+
 
 var port = process.env.PORT || 8080;
 
-http.createServer(app).listen(port, function (err) {
+
+var server = http.createServer(app).listen(port, function (err) {
   console.log('listening in http://localhost:' + port);
+  var peerServer = new PeerServer({ port: 3000, path: '/' });
+
+  peerServer.on('connection', function (id) {
+    console.log(new Date(), '++Connection from ', id);
+
+    peerPool.addPeerToPool(id);
+
+    console.log('\tAll Connected Peers ==>', peerPool.allConnectedPeers);
+    console.log('\tConfirmed Peers ==>', peerPool.confirmedConnectedPeers);
+  });
+
+  peerServer.on('disconnect', function (id) {
+    console.log(new Date(), '--Disconnect of ', id);
+
+    peerPool.removePeerFromPool(id);
+
+    console.log('\tAll Connected Peers ==>', peerPool.allConnectedPeers);
+    console.log('\tConfirmed Peers ==>', peerPool.confirmedConnectedPeers);
+
+    io.sockets.emit('peer_pool', peerPool.confirmedConnectedPeers);
+  });
 });
+
+io = require('socket.io').listen(server);
+require('./lib/config/peer-routes')(app, io);

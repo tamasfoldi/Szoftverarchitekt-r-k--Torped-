@@ -70,6 +70,18 @@
     },
     "angular-storage/angular-storage.d.ts": {
       "commit": "c560ba6f0f55ce6f50e9d06e37b5bc0e2b9117b0"
+    },
+    "peerjs/peerjs.d.ts": {
+      "commit": "e48f0c7a0a5f9e9d35e9cfd7506461bab435cb49"
+    },
+    "es6-promise/es6-promise.d.ts": {
+      "commit": "e48f0c7a0a5f9e9d35e9cfd7506461bab435cb49"
+    },
+    "webrtc/RTCPeerConnection.d.ts": {
+      "commit": "e48f0c7a0a5f9e9d35e9cfd7506461bab435cb49"
+    },
+    "webrtc/MediaStream.d.ts": {
+      "commit": "e48f0c7a0a5f9e9d35e9cfd7506461bab435cb49"
     }
   }
 }
