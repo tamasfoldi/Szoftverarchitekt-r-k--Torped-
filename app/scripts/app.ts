@@ -175,8 +175,7 @@ module App {
       //   { url: stunURL } // Pass in optional STUN and TURN server for maximum network compatibility
       // ]}});
 
-      // navigator.getUserMedia({audio: true, video: true}, function(stream) {
-      navigator.getUserMedia({audio: true, video: true}, function(stream) {
+      navigator.getUserMedia({audio: true, video: false}, function(stream) {
         var peerLocalStream = stream;
         var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
         var peer = new Peer({ host: $location.host(), path: "/", port: 3000, debug: 3, config: {"iceServers": [ { url: stunURL } // pass in optional STUN and TURN server for maximum network compatibility

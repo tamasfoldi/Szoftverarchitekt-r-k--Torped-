@@ -14,12 +14,7 @@ module Controllers {
         this.scope.peerObject = peerObject;
         this.peerID = peerObject.peer.id;
         $scope.streamReady = true;
-        if (!store.get("peerObject")) {
-          this.secret = Math.random().toString(36).substring(10);
-          store.set("peerObject", { id: this.peerID, secret: this.secret });
-        } else {
-          this.secret = store.get("peerObject")["secret"];
-        }
+        this.secret = Math.random().toString(36).substring(10);
 
         // confirm to the server that my peerID is ready to be connected to
         $http.post("/peer/confirmID", {

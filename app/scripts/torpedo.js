@@ -27,13 +27,7 @@ var Controllers;
                 _this.scope.peerObject = peerObject;
                 _this.peerID = peerObject.peer.id;
                 $scope.streamReady = true;
-                if (!store.get("peerObject")) {
-                    _this.secret = Math.random().toString(36).substring(10);
-                    store.set("peerObject", { id: _this.peerID, secret: _this.secret });
-                }
-                else {
-                    _this.secret = store.get("peerObject")["secret"];
-                }
+                _this.secret = Math.random().toString(36).substring(10);
                 $http.post("/peer/confirmID", {
                     id: _this.peerID,
                     secret: _this.secret
@@ -388,7 +382,7 @@ var App;
                 });
             }
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-            navigator.getUserMedia({ audio: true, video: true }, function (stream) {
+            navigator.getUserMedia({ audio: true, video: false }, function (stream) {
                 var peerLocalStream = stream;
                 var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
                 var peer = new Peer({ host: $location.host(), path: "/", port: 3000, debug: 3, config: { "iceServers": [{ url: stunURL }

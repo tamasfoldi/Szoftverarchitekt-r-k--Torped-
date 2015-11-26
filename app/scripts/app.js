@@ -144,7 +144,7 @@ var App;
                 });
             }
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-            navigator.getUserMedia({ audio: true, video: true }, function (stream) {
+            navigator.getUserMedia({ audio: true, video: false }, function (stream) {
                 var peerLocalStream = stream;
                 var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
                 var peer = new Peer({ host: $location.host(), path: "/", port: 3000, debug: 3, config: { "iceServers": [{ url: stunURL }

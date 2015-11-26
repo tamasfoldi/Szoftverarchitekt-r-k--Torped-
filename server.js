@@ -59,6 +59,7 @@ var port = process.env.PORT || 8080;
 var server = http.createServer(app).listen(port, function (err) {
   console.log('listening in http://localhost:' + port);
   var peerServer = new PeerServer({ port: 3000, path: '/' });
+  console.log("PeerJs server created");
 
   peerServer.on('connection', function (id) {
     console.log(new Date(), '++Connection from ', id);

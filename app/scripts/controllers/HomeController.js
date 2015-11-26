@@ -10,13 +10,7 @@ var Controllers;
                 _this.scope.peerObject = peerObject;
                 _this.peerID = peerObject.peer.id;
                 $scope.streamReady = true;
-                if (!store.get("peerObject")) {
-                    _this.secret = Math.random().toString(36).substring(10);
-                    store.set("peerObject", { id: _this.peerID, secret: _this.secret });
-                }
-                else {
-                    _this.secret = store.get("peerObject")["secret"];
-                }
+                _this.secret = Math.random().toString(36).substring(10);
                 $http.post("/peer/confirmID", {
                     id: _this.peerID,
                     secret: _this.secret
