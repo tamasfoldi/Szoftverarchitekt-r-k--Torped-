@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../references.ts" />
 module App {
-  angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages"])
+  angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages", "btford.socket-io"])
     .config(($urlRouterProvider: angular.ui.IUrlRouterProvider, jwtInterceptorProvider: angular.jwt.IJwtInterceptor, $httpProvider: angular.IHttpProvider,
       $stateProvider: angular.ui.IStateProvider) => {
       $stateProvider
@@ -77,7 +77,7 @@ module App {
       });
     })
     .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
-    .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", Controllers.HomeCtrl])
+    .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", "socket", Controllers.HomeCtrl])
     .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
     .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
     .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
@@ -92,8 +92,8 @@ module App {
         templateUrl: "/partials/sidenav.html"
       };
     })
-    .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location",
-    function ($q, $rootScope, $sce, $location) {
+    .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location", "store",
+    ($q, $rootScope, $sce, $location, store) => {
       var deferred = $q.defer();
       // var peerKey = "7k99lrngvwle4s4i";
       var stunURL = "stun:stun.l.google.com:19302";
@@ -169,17 +169,12 @@ module App {
       // compatibility shim
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-      // peerJS object
-      // -- Peer JS CLOUD
-      // var peer = new Peer({ key: peerKey, debug: 3, config: {"iceServers": [
-      //   { url: stunURL } // Pass in optional STUN and TURN server for maximum network compatibility
-      // ]}});
 
-      navigator.getUserMedia({audio: true, video: false}, function(stream) {
+      navigator.getUserMedia({audio: true, video: false}, (stream) => {
         var peerLocalStream = stream;
         var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
         var peer = new Peer({ host: $location.host(), path: "/", port: 3000, debug: 3, config: {"iceServers": [ { url: stunURL } // pass in optional STUN and TURN server for maximum network compatibility
-        ]}});
+          ]}});
 
         peer.on("open", function() { _resolvePeer(peer, peerLocalStream, blobURL); });
 
@@ -216,5 +211,13 @@ module App {
         }
       };
 
-  }]);
+  }])
+  .factory("socket", (socketFactory) => {
+    return socketFactory();
+  })
+  .run(($window: angular.IWindowService, store: angular.a0.storage.IStoreService) => {
+    $window.onbeforeunload = () => {
+      store.remove("secret");
+    };
+  });
 }

@@ -7,5 +7,9 @@
     Requested Peer: <input type="text" ng-model="HomeCtrl.remotePeerID" >
     <button ng-click="HomeCtrl.callRequestedPeer()">Call Requested Peer</button>
     <button ng-click="HomeCtrl.endCall()">End Call</button>
+    <ul>
+      <li ng-repeat="id in HomeCtrl.peerIDs">{{id}}</li>
+    </ul>
+    <h4>Number of connected peers {{HomeCtrl.onlineUsers}}</h4>
   </div>
 </div>

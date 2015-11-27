@@ -1,7 +1,7 @@
 /// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages", "btford.socket-io"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {
@@ -75,7 +75,7 @@ var App;
         });
     })
         .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
-        .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", Controllers.HomeCtrl])
+        .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", "socket", Controllers.HomeCtrl])
         .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
         .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
         .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
@@ -90,8 +90,8 @@ var App;
             templateUrl: "/partials/sidenav.html"
         };
     })
-        .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location",
-        function ($q, $rootScope, $sce, $location) {
+        .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location", "store",
+        function ($q, $rootScope, $sce, $location, store) {
             var deferred = $q.defer();
             var stunURL = "stun:stun.l.google.com:19302";
             var existingCall;
@@ -170,6 +170,14 @@ var App;
                     return deferred.promise;
                 }
             };
-        }]);
+        }])
+        .factory("socket", function (socketFactory) {
+        return socketFactory();
+    })
+        .run(function ($window, store) {
+        $window.onbeforeunload = function () {
+            store.remove("secret");
+        };
+    });
 })(App || (App = {}));
 //# sourceMappingURL=app.js.map

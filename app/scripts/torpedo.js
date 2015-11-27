@@ -19,15 +19,26 @@ var Controllers;
 var Controllers;
 (function (Controllers) {
     var HomeCtrl = (function () {
-        function HomeCtrl($http, store, PeerConnect, $scope, $rootScope) {
+        function HomeCtrl($http, store, PeerConnect, $scope, $rootScope, socket) {
             var _this = this;
             this.scope = $scope;
             this.http = $http;
+            socket.on("peer_pool", function (data) {
+                _this.onlineUsers = data.length;
+                _this.peerIDs = data;
+            });
             PeerConnect.getPeer().then(function (peerObject) {
                 _this.scope.peerObject = peerObject;
+                _this.peerID = store.get("username");
                 _this.peerID = peerObject.peer.id;
                 $scope.streamReady = true;
-                _this.secret = Math.random().toString(36).substring(10);
+                if (store.get("secret")) {
+                    _this.secret = store.get("secret");
+                }
+                else {
+                    _this.secret = Math.random().toString(36).substring(10);
+                    store.set("secret", _this.secret);
+                }
                 $http.post("/peer/confirmID", {
                     id: _this.peerID,
                     secret: _this.secret
@@ -239,7 +250,7 @@ var Controllers;
 //# sourceMappingURL=UserController.js.map;/// <reference path="../../references.ts" />
 var App;
 (function (App) {
-    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages"])
+    angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages", "btford.socket-io"])
         .config(function ($urlRouterProvider, jwtInterceptorProvider, $httpProvider, $stateProvider) {
         $stateProvider
             .state("home", {
@@ -313,7 +324,7 @@ var App;
         });
     })
         .controller("AppCtrl", ["$location", "$scope", Controllers.AppCtrl])
-        .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", Controllers.HomeCtrl])
+        .controller("HomeCtrl", ["$http", "store", "PeerConnect", "$scope", "$rootScope", "socket", Controllers.HomeCtrl])
         .controller("LoginCtrl", ["$http", "store", "$state", Controllers.LoginCtrl])
         .controller("RegCtrl", ["$http", "store", "$state", Controllers.RegCtrl])
         .controller("UserCtrl", ["$http", "$state", "$mdToast", Controllers.UserCtrl])
@@ -328,8 +339,8 @@ var App;
             templateUrl: "/partials/sidenav.html"
         };
     })
-        .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location",
-        function ($q, $rootScope, $sce, $location) {
+        .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location", "store",
+        function ($q, $rootScope, $sce, $location, store) {
             var deferred = $q.defer();
             var stunURL = "stun:stun.l.google.com:19302";
             var existingCall;
@@ -408,6 +419,14 @@ var App;
                     return deferred.promise;
                 }
             };
-        }]);
+        }])
+        .factory("socket", function (socketFactory) {
+        return socketFactory();
+    })
+        .run(function ($window, store) {
+        $window.onbeforeunload = function () {
+            store.remove("secret");
+        };
+    });
 })(App || (App = {}));
 //# sourceMappingURL=app.js.map

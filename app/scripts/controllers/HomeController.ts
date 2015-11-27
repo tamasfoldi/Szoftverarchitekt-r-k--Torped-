@@ -7,14 +7,28 @@ module Controllers {
     private secret: string;
     private peerID: string;
     private remotePeerID: string;
-    constructor($http: angular.IHttpService, store: angular.a0.storage.IStoreService, PeerConnect, $scope, $rootScope) {
+    private onlineUsers: number;
+    private peerIDs;
+    constructor($http: angular.IHttpService, store: angular.a0.storage.IStoreService, PeerConnect, $scope, $rootScope, socket) {
       this.scope = $scope;
       this.http = $http;
+
+      socket.on("peer_pool", (data) => {
+        this.onlineUsers = data.length;
+        this.peerIDs = data;
+      });
+
       PeerConnect.getPeer().then((peerObject) => {
         this.scope.peerObject = peerObject;
+        this.peerID = store.get("username");
         this.peerID = peerObject.peer.id;
         $scope.streamReady = true;
-        this.secret = Math.random().toString(36).substring(10);
+        if (store.get("secret")) {
+          this.secret = store.get("secret");
+        } else {
+          this.secret = Math.random().toString(36).substring(10);
+          store.set("secret", this.secret);
+        }
 
         // confirm to the server that my peerID is ready to be connected to
         $http.post("/peer/confirmID", {
