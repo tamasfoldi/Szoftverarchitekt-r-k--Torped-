@@ -20,7 +20,6 @@ module Controllers {
 
       PeerConnect.getPeer().then((peerObject) => {
         this.scope.peerObject = peerObject;
-        this.peerID = store.get("username");
         this.peerID = peerObject.peer.id;
         $scope.streamReady = true;
         if (store.get("secret")) {

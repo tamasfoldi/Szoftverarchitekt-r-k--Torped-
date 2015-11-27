@@ -12,7 +12,6 @@ var Controllers;
             });
             PeerConnect.getPeer().then(function (peerObject) {
                 _this.scope.peerObject = peerObject;
-                _this.peerID = store.get("username");
                 _this.peerID = peerObject.peer.id;
                 $scope.streamReady = true;
                 if (store.get("secret")) {
