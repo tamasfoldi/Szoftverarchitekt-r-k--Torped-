@@ -6,7 +6,7 @@
   </md-toolbar>
   <md-card ng-hide="UserCtrl.isEdit">
     <md-card-content>
-      <img src="{{ UserCtrl.user.picUrl }}">
+      <img ng-src="{{ UserCtrl.user.picUrl }}">
       <p>
         <b>Username: </b>{{ UserCtrl.user.username }}
       </p>
@@ -16,6 +16,11 @@
       <b>About: </b>
       <p>{{ UserCtrl.user.about }}</p>
       <md-button ng-click="UserCtrl.isEdit = !UserCtrl.isEdit">Click here to edit</md-button>
+      <h3>Stats</h3>
+      <div><b>Total games: </b>{{ UserCtrl.user.nofGames }}</div>
+      <div><b>Winning rate: </b>{{ UserCtrl.user.nofWons / UserCtrl.user.nofGames}}</div>
+      <div><b>Average game length: </b>{{ UserCtrl.user.avgGameTime | date: 'mm:ss:sss' }}</div>
+      <div><b>Last login: </b>{{ UserCtrl.user.lastLogin | date: 'short' }}</div>
     </md-card-content>
   </md-card>
 </div>

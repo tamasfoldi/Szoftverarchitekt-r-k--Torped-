@@ -8,5 +8,9 @@ module Model {
     gender: string;
     about: string;
     picUrl: string;
+    nofGames: number;
+    nofWons: number;
+    avgGameTime: number;
+    lastLogin;
   }
 }

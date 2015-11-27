@@ -18,9 +18,16 @@ module Controllers {
         method: "POST",
         data: this.user
       }).then((response) => {
-        this.store.set("jwt", response.data["id_token"]);
-        this.store.set("username", this.user.username);
-        this.state.go("user", {username: this.user.username});
+        this.user.lastLogin = Date.now();
+        this.http({
+          url: "/users/" + this.user.username,
+          method: "PUT",
+          data: this.user
+        }).then(() => {
+          this.store.set("jwt", response.data["id_token"]);
+          this.store.set("username", this.user.username);
+          this.state.go("user", {username: this.user.username});
+        });
       }, function(error) {
         alert(error.data.message);
       });

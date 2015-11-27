@@ -22,6 +22,22 @@ var UserSchema = new Schema({
     type: String,
     default: "http://lorempixel.com/100/100/abstract/1"
   },
+  nofGames: {
+    type: Number,
+    default: 0
+  },
+  nofWons: {
+    type: Number,
+    default: 0
+  },
+  avgGameTime: {
+    type: Number,
+    default: 0
+  },
+  lastLogin: {
+    type: Date,
+    default: Date.now
+  },
   hashedPassword: String,
   salt: String
 });
