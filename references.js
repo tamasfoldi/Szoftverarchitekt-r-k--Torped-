@@ -11,7 +11,6 @@
 /// <reference path="Scripts/typings/angularjs/angular-resource.d.ts" />
 /// <reference path="Scripts/typings/angularjs/angular-route.d.ts" />
 /// <reference path="Scripts/typings/angularjs/angular.d.ts" />
-/// <reference path="Scripts/typings/es6-shim/es6-shim.d.ts" />
 /// <reference path="Scripts/typings/express/express.d.ts" />
 /// <reference path="Scripts/typings/jasmine/jasmine.d.ts" />
 /// <reference path="Scripts/typings/jquery/jquery.d.ts" />
