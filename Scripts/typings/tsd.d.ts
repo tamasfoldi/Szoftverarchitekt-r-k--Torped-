@@ -14,7 +14,6 @@
 /// <reference path="express/express.d.ts" />
 /// <reference path="mime/mime.d.ts" />
 /// <reference path="serve-static/serve-static.d.ts" />
-/// <reference path="es6-shim/es6-shim.d.ts" />
 /// <reference path="mongoose/mongoose.d.ts" />
 /// <reference path="angular-jwt/angular-jwt.d.ts" />
 /// <reference path="angular-storage/angular-storage.d.ts" />
