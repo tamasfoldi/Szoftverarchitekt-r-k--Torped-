@@ -8,8 +8,11 @@
     <button ng-click="HomeCtrl.callRequestedPeer()">Call Requested Peer</button>
     <button ng-click="HomeCtrl.endCall()">End Call</button>
     <ul>
-      <li ng-repeat="id in HomeCtrl.peerIDs">{{id}}</li>
+      <li ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id">{{id}}</li>
     </ul>
-    <h4>Number of connected peers {{HomeCtrl.onlineUsers}}</h4>
+    <h4>Online users: {{HomeCtrl.onlineUsers}}</h4>
   </div>
+    <div id="boards">
+
+    </div>
 </div>
