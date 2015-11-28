@@ -96,78 +96,65 @@ var App;
         .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location", "store",
         function ($q, $rootScope, $sce, $location, store) {
             var deferred = $q.defer();
+            // var peerKey = "7k99lrngvwle4s4i";
             var stunURL = "stun:stun.l.google.com:19302";
-            var existingCall;
             var existingConn;
-            function _resolvePeer(peer, peerLocalStream, blobURL) {
+            function _resolvePeer(peer) {
                 var peerObject = {
                     peer: peer,
-                    peerLocalStream: peerLocalStream,
-                    videoURL: blobURL,
-                    makeCall: function (remotePeerId) {
-                        console.log("Initiating a call to: ", remotePeerId);
-                        var call = peer.call(remotePeerId, peerLocalStream);
-                        _setupCallEvents(call);
+                    // connects to the given remotePeerId -- returns a DataConnection object
+                    makeConnection: function (remotePeerId) {
                         console.log("Initiating a data connection to: ", remotePeerId);
-                        existingConn = peer.connect(remotePeerId, peerLocalStream);
-                        existingConn.on("close", function () {
-                            console.log("Data connection closed!");
-                        });
+                        var connection = peer.connect(remotePeerId);
+                        _setupConnEvents(connection);
                         return existingConn;
                     },
-                    endCall: function () {
-                        _endExistingCalls();
+                    // closes the existing call and connection
+                    endConnection: function () {
+                        _endExistingConnections();
                     }
                 };
                 deferred.resolve(peerObject);
             }
-            function _endExistingCalls() {
-                if (existingCall) {
-                    existingCall.close();
-                }
+            function _endExistingConnections() {
                 if (existingConn) {
                     existingConn.close();
                 }
             }
-            function _setupCallEvents(call) {
-                _endExistingCalls();
-                existingCall = call;
-                call.on("stream", function (stream) {
-                    var remoteBlobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
-                    $rootScope.$emit("peerStreamReceived", remoteBlobURL);
+            function _setupConnEvents(conn) {
+                _endExistingConnections();
+                existingConn = conn;
+                // when either you or the other ends the conn
+                conn.on("close", function () {
+                    console.log("You have been disconnected from ", existingConn);
+                    $rootScope.$emit("connectionEnded", existingConn);
+                    // hang up on any existing connections if present
+                    _endExistingConnections();
                 });
-                call.on("close", function () {
-                    console.log("You have been disconnected from ", existingCall);
-                    $rootScope.$emit("callEnded", existingCall);
-                    _endExistingCalls();
-                });
-                call.on("error", function (err) {
-                    console.log("Call Error: ", err);
-                    _endExistingCalls();
+                conn.on("error", function (err) {
+                    console.log("Connection Error: ", err);
+                    _endExistingConnections();
                 });
             }
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-            navigator.getUserMedia({ audio: true, video: false }, function (stream) {
-                var peerLocalStream = stream;
-                var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
-                var peer = new Peer(store.get("username"), { host: $location.host(), path: "/", port: 3000, debug: 3, config: { "iceServers": [{ url: stunURL }
-                        ] } });
-                peer.on("open", function () { _resolvePeer(peer, peerLocalStream, blobURL); });
-                peer.on("call", function (call) {
-                    console.log("Answering a call!");
-                    call.answer(peerLocalStream);
-                    _setupCallEvents(call);
-                });
-                peer.on("connection", function (connection) {
-                    console.log("Answering a connection!", connection);
-                    $rootScope.$emit("peerConnectionReceived", connection);
-                });
-                peer.on("error", function (err) {
-                    console.log("ERROR! Couldn\"t connect to given peer");
-                    $rootScope.$emit("callFailed", err);
-                });
-                console.log("Peer Connect: Stream ready: ", stream);
-            }, function () { deferred.reject("Failed to getUserMedia!"); });
+            var peer = new Peer(store.get("username"), {
+                host: $location.host(), path: "/", port: 3000, debug: 3, config: {
+                    "iceServers": [{ url: stunURL } // pass in optional STUN and TURN server for maximum network compatibility
+                    ]
+                }
+            });
+            peer.on("open", function () {
+                _resolvePeer(peer);
+            });
+            // receiving a data connection
+            peer.on("connection", function (connection) {
+                console.log("Answering a connection!", connection);
+                $rootScope.$emit("peerConnectionReceived", connection);
+                _setupConnEvents(connection);
+            });
+            peer.on("error", function (err) {
+                console.log("ERROR! Couldn\"t connect to given peer");
+                $rootScope.$emit("connectFailed", err);
+            });
             return {
                 getPeer: function () {
                     return deferred.promise;

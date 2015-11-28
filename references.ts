@@ -16,6 +16,7 @@
 /// <reference path="Scripts/typings/express/express.d.ts" />
 /// <reference path="Scripts/typings/jasmine/jasmine.d.ts" />
 /// <reference path="Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="Scripts/typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="Scripts/typings/mime/mime.d.ts" />
 /// <reference path="Scripts/typings/mongoose/mongoose.d.ts" />
 /// <reference path="Scripts/typings/node/node.d.ts" />

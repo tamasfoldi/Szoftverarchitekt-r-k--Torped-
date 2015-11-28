@@ -9,7 +9,7 @@
       "commit": "fa04c80f4a889613b96cb4f283848c61a9f64233"
     },
     "jquery/jquery.d.ts": {
-      "commit": "fa04c80f4a889613b96cb4f283848c61a9f64233"
+      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
     },
     "angular-local-storage/angular-local-storage.d.ts": {
       "commit": "eab2e0487e9685952db58e487d484a1c342ec670"
@@ -82,6 +82,9 @@
     },
     "webrtc/MediaStream.d.ts": {
       "commit": "e48f0c7a0a5f9e9d35e9cfd7506461bab435cb49"
+    },
+    "jqueryui/jqueryui.d.ts": {
+      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
     }
   }
 }

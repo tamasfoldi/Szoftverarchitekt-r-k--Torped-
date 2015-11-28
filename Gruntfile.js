@@ -6,14 +6,14 @@ module.exports = function (grunt) {
         configuration: grunt.file.readJSON("tslint.json")
       },
       all: {
-        src: ["**/*.ts", "!node_modules/**/*.ts", "!Scripts/typings/**/*.ts", "!Specs/**/*.ts", "!references.ts"]
+        src: ["**/*.ts", "!node_modules/**/*.ts", "!Scripts/typings/**/*.ts", "!Specs/**/*.ts", "!references.ts", "!app/scripts/game.ts"]
         // avoid linting typings files and node_modules files
       }
     },
 
     ts: {
       build: {
-        src: ["references.ts", "**/*.ts", "!node_modules/**/*.ts"],
+        src: ["references.ts", "**/*.ts", "!node_modules/**/*.ts","!app/scripts/game.ts" ],
         reference: "references.ts",
         options: {
           module: "commonjs",

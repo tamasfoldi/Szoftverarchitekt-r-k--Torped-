@@ -1,20 +1,31 @@
 <div class="home">
   <div>
-    <h1>Peer Id: {{ HomeCtrl.peerID }}</h1>
-    <h2>Secret: {{ HomeCtrl.secret }}</h2>
-    <h3>Remote Peer Id: {{ HomeCtrl.remotePeerID }}</h3>
-    <button ng-click="HomeCtrl.callRandomPeer()">Call Random Peer</button>
-    Requested Peer: <input type="text" ng-model="HomeCtrl.remotePeerID" >
-    <button ng-click="HomeCtrl.callRequestedPeer()">Call Requested Peer</button>
-    <button ng-click="HomeCtrl.endCall()">End Call</button>
-    <ul>
-      <li ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id">{{id}}
-        <button ng-click="HomeCtrl.remotePeerID = id; HomeCtrl.callRequestedPeer()">Call</button>
-      </li>
-    </ul>
+    <h1>Game</h1>
+    <div>
+      <h2>My information</h2>
+      Peer Id: {{ HomeCtrl.peerID }}<br>
+      Secret: {{ HomeCtrl.secret }}
+    </div>
+    <div>
+      <div ng-if="!HomeCtrl.remotePeerID">
+      <h2>Connect to other players</h2>
+      <button ng-click="HomeCtrl.connectToRandomPeer()">Play with Random Peer</button>
+          <h3> Connected players:</h3>
+        <ul>
+            <li ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id">{{id}}
+                <button ng-click="HomeCtrl.remotePeerID = id; HomeCtrl.connectToRequestedPeer()">Play!</button>
+            </li>
+        </ul>
+      </div>
+      <div ng-if="HomeCtrl.remotePeerID">
+          <h2>Connected!</h2>
+          <h3>Connected to: {{ HomeCtrl.remotePeerID }}</h3>
+          <button ng-click="HomeCtrl.endConnection()">Disconnect</button>
+      </div>
+    </div>
     <h4>Online users: {{HomeCtrl.onlineUsers}}</h4>
+    <button ng-click="HomeCtrl.sendHi()">Send Hi!</button>
   </div>
     <div id="boards">
-
     </div>
 </div>
