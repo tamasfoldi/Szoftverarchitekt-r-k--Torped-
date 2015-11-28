@@ -8,7 +8,10 @@ var App;
             url: "/",
             controller: Controllers.HomeCtrl,
             controllerAs: "HomeCtrl",
-            templateUrl: "partials/home.html"
+            templateUrl: "partials/home.html",
+            data: {
+                requiresLogin: true
+            }
         })
             .state("login", {
             url: "/login",
