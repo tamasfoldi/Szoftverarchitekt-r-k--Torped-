@@ -406,7 +406,7 @@ var App;
             navigator.getUserMedia({ audio: true, video: false }, function (stream) {
                 var peerLocalStream = stream;
                 var blobURL = $sce.trustAsResourceUrl(URL.createObjectURL(stream));
-                var peer = new Peer({ host: $location.host(), path: "/", port: 3000, debug: 3, config: { "iceServers": [{ url: stunURL }
+                var peer = new Peer(store.get("username"), { host: $location.host(), path: "/", port: 3000, debug: 3, config: { "iceServers": [{ url: stunURL }
                         ] } });
                 peer.on("open", function () { _resolvePeer(peer, peerLocalStream, blobURL); });
                 peer.on("call", function (call) {
