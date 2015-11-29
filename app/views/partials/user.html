@@ -19,7 +19,7 @@
       <h3>Stats</h3>
       <div><b>Total games: </b>{{ UserCtrl.user.nofGames }}</div>
       <div><b>Winning rate: </b>{{ UserCtrl.user.nofWons / UserCtrl.user.nofGames}}</div>
-      <div><b>Average game length: </b>{{ UserCtrl.user.avgGameTime | date: 'mm:ss:sss' }}</div>
+      <div><b>Average game length: </b>{{ UserCtrl.user.avgGameTime | date: 'mm:ss' }}s</div>
       <div><b>Last login: </b>{{ UserCtrl.user.lastLogin | date: 'short' }}</div>
     </md-card-content>
   </md-card>

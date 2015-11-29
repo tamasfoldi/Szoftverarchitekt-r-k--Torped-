@@ -129,6 +129,7 @@ module App {
                 function _endExistingConnections() {
                     if (existingConn) {
                         existingConn.close();
+                        ereaseGame();
                     }
                 }
 
@@ -136,9 +137,10 @@ module App {
                     _endExistingConnections();
                     existingConn = conn;
                     // when either you or the other ends the conn
-                    conn.on("data", function (data) {
-                        console.log("Incoming data: ", data);
-                    });
+                    //conn.on("data", this.scope.messagehandler);
+                    //conn.on("data", function (data) {
+                    //    console.log("Incoming data: ", data);
+                    //});
 
                     conn.on("close", function () {
                         console.log("You have been disconnected from ", existingConn);
@@ -186,6 +188,7 @@ module App {
                 };
 
             }])
+        //.factory("Game", ["$q", "$rootScope", "$sce", "$location", "store",TorpedoGame.Main])
         .factory("socket", (socketFactory) => {
             return socketFactory();
         })

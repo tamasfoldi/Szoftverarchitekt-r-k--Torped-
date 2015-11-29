@@ -116,14 +116,12 @@ var App;
             function _endExistingConnections() {
                 if (existingConn) {
                     existingConn.close();
+                    ereaseGame();
                 }
             }
             function _setupConnEvents(conn) {
                 _endExistingConnections();
                 existingConn = conn;
-                conn.on("data", function (data) {
-                    console.log("Incoming data: ", data);
-                });
                 conn.on("close", function () {
                     console.log("You have been disconnected from ", existingConn);
                     $rootScope.$emit("connectionEnded", existingConn);

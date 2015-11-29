@@ -23,9 +23,22 @@ var Controllers;
             var _this = this;
             this.scope = $scope;
             this.http = $http;
+            this.store = store;
             socket.on("peer_pool", function (data) {
                 _this.onlineUsers = data.length;
                 _this.peerIDs = data;
+            });
+            document.addEventListener('gameOver', function (event) {
+                var _this = this;
+                $http.put('/users/gameStat/' + store.get("username"), {
+                    gameResult: event.detail.gameResult,
+                    gameLength: event.detail.gameLength
+                }).success(function (res) {
+                    console.log("Stats updated ", res);
+                }).error(function (data, status) {
+                    console.log("Failed to update stats ", data, status);
+                    _this.scope.peerError = data.error;
+                });
             });
             PeerConnect.getPeer().then(function (peerObject) {
                 _this.scope.peerObject = peerObject;
@@ -54,8 +67,10 @@ var Controllers;
                 $rootScope.$on("peerConnectionReceived", function (event, connection) {
                     console.log("Peer DataConnection received", connection);
                     $scope.peerDataConnection = connection;
-                    $scope.connected = true;
                     _this.remotePeerID = connection.peer;
+                    game = new Game(_this.scope.peerDataConnection);
+                    $scope.peerDataConnection.on("data", handleMessage);
+                    $scope.connected = true;
                     $scope.peerError = null;
                     $scope.$apply();
                 });
@@ -118,15 +133,25 @@ var Controllers;
                 // attachReceiptListeners();
                 _this.scope.peerError = null;
                 _this.scope.connected = true;
+                game = new Game(_this.scope.peerDataConnection);
+                _this.scope.peerDataConnection.on("data", handleMessage);
                 _this.scope.$apply();
             });
             this.scope.peerDataConnection.on("error", function (err) {
                 console.log("Failed to connect to given peerID", err);
             });
         };
-        HomeCtrl.prototype.sendHi = function () {
-            console.log("Sendhi: ", this.scope.peerDataConnection);
-            this.scope.peerDataConnection.send("Hi2!");
+        HomeCtrl.prototype.updatePlayerStats = function (gameResult, gameLength) {
+            var _this = this;
+            this.http.put('/users/gameStat/' + this.store.get("username"), {
+                gameResult: gameResult,
+                gameLength: gameLength
+            }).success(function (res) {
+                console.log("Stats updated ", res);
+            }).error(function (data, status) {
+                console.log("Failed to update stats ", data, status);
+                _this.scope.peerError = data.error;
+            });
         };
         return HomeCtrl;
     })();
@@ -363,14 +388,12 @@ var App;
             function _endExistingConnections() {
                 if (existingConn) {
                     existingConn.close();
+                    ereaseGame();
                 }
             }
             function _setupConnEvents(conn) {
                 _endExistingConnections();
                 existingConn = conn;
-                conn.on("data", function (data) {
-                    console.log("Incoming data: ", data);
-                });
                 conn.on("close", function () {
                     console.log("You have been disconnected from ", existingConn);
                     $rootScope.$emit("connectionEnded", existingConn);
