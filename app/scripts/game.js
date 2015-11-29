@@ -156,7 +156,7 @@ var MyBoard = (function (_super) {
         var _this = this;
         _super.call(this, element);
         this.element = element;
-        this.shipSizes = [2];
+        this.shipSizes = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2];
         this.positioningEnabled = true;
         for (var row = 0; row < this.cells.length; row++) {
             for (var column = 0; column < this.cells[0].length; column++) {

@@ -172,8 +172,8 @@ abstract class Board {
 }
 
 class MyBoard extends Board {
-    //shipSizes = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2];
-    shipSizes = [2];
+    shipSizes = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2];
+    // shipSizes = [2];
     private positioningEnabled:boolean;    // Set to true when the player can position the ships
 
     constructor(public element:HTMLElement) {
