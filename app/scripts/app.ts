@@ -95,8 +95,8 @@ module App {
                 templateUrl: "/partials/sidenav.html"
             };
         })
-        .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location", "store",
-            ($q, $rootScope, $sce, $location, store) => {
+        .factory("PeerConnect", ["$q", "$rootScope", "$location", "store",
+            ($q, $rootScope, $location, store) => {
                 var deferred = $q.defer();
                 // var peerKey = "7k99lrngvwle4s4i";
                 var stunURL = "stun:stun.l.google.com:19302";
@@ -163,7 +163,6 @@ module App {
                     }
                 });
 
-
                 peer.on("open", function () {
                     _resolvePeer(peer);
                 });
@@ -171,8 +170,8 @@ module App {
                 // receiving a data connection
                 peer.on("connection", function (connection) {
                     console.log("Answering a connection!", connection);
-                    $rootScope.$emit("peerConnectionReceived", connection);
                     _setupConnEvents(connection);
+                    $rootScope.$emit("peerConnectionReceived", connection);
                 });
 
                 peer.on("error", function (err) {
@@ -188,7 +187,6 @@ module App {
                 };
 
             }])
-        //.factory("Game", ["$q", "$rootScope", "$sce", "$location", "store",TorpedoGame.Main])
         .factory("socket", (socketFactory) => {
             return socketFactory();
         })

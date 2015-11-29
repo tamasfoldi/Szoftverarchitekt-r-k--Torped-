@@ -7,6 +7,9 @@ var Controllers;
             this.scope = $scope;
             this.http = $http;
             this.store = store;
+            $scope.$on("$destroy", function () {
+                $scope.peerObject.endConnection();
+            });
             socket.on("peer_pool", function (data) {
                 _this.onlineUsers = data.length;
                 _this.peerIDs = data;
@@ -33,6 +36,7 @@ var Controllers;
                     _this.secret = Math.random().toString(36).substring(10);
                     store.set("secret", _this.secret);
                 }
+                // confirm to the server that my peerID is ready to be connected to
                 $http.post("/peer/confirmID", {
                     id: _this.peerID,
                     secret: _this.secret
@@ -51,16 +55,15 @@ var Controllers;
                     console.log("Peer DataConnection received", connection);
                     $scope.peerDataConnection = connection;
                     _this.remotePeerID = connection.peer;
+                    // create game
                     game = new Game(_this.scope.peerDataConnection);
                     $scope.peerDataConnection.on("data", handleMessage);
-                    $scope.connected = true;
                     $scope.peerError = null;
                     $scope.$apply();
                 });
                 $rootScope.$on("connectionEnded", function (event, connectionObject) {
                     console.log("Peer Disconnected!", connectionObject);
                     _this.remotePeerID = "";
-                    $scope.connected = false;
                     $http.post("/peer/endCall", { id: _this.peerID, secret: _this.secret }).success(function (res) {
                         console.log(res);
                         this.remotePeerID = null;
@@ -74,7 +77,6 @@ var Controllers;
         }
         HomeCtrl.prototype.endConnection = function () {
             this.scope.peerObject.endConnection();
-            this.scope.connected = false;
         };
         HomeCtrl.prototype.connectToRequestedPeer = function () {
             var _this = this;
@@ -115,25 +117,13 @@ var Controllers;
             this.scope.peerDataConnection.on("open", function () {
                 // attachReceiptListeners();
                 _this.scope.peerError = null;
-                _this.scope.connected = true;
+                // create game
                 game = new Game(_this.scope.peerDataConnection);
                 _this.scope.peerDataConnection.on("data", handleMessage);
                 _this.scope.$apply();
             });
             this.scope.peerDataConnection.on("error", function (err) {
                 console.log("Failed to connect to given peerID", err);
-            });
-        };
-        HomeCtrl.prototype.updatePlayerStats = function (gameResult, gameLength) {
-            var _this = this;
-            this.http.put('/users/gameStat/' + this.store.get("username"), {
-                gameResult: gameResult,
-                gameLength: gameLength
-            }).success(function (res) {
-                console.log("Stats updated ", res);
-            }).error(function (data, status) {
-                console.log("Failed to update stats ", data, status);
-                _this.scope.peerError = data.error;
             });
         };
         return HomeCtrl;

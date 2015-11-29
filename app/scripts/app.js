@@ -93,20 +93,23 @@ var App;
             templateUrl: "/partials/sidenav.html"
         };
     })
-        .factory("PeerConnect", ["$q", "$rootScope", "$sce", "$location", "store",
-        function ($q, $rootScope, $sce, $location, store) {
+        .factory("PeerConnect", ["$q", "$rootScope", "$location", "store",
+        function ($q, $rootScope, $location, store) {
             var deferred = $q.defer();
+            // var peerKey = "7k99lrngvwle4s4i";
             var stunURL = "stun:stun.l.google.com:19302";
             var existingConn;
             function _resolvePeer(peer) {
                 var peerObject = {
                     peer: peer,
+                    // connects to the given remotePeerId -- returns a DataConnection object
                     makeConnection: function (remotePeerId) {
                         console.log("Initiating a data connection to: ", remotePeerId);
                         var connection = peer.connect(remotePeerId);
                         _setupConnEvents(connection);
                         return existingConn;
                     },
+                    // closes the existing call and connection
                     endConnection: function () {
                         _endExistingConnections();
                     }
@@ -122,9 +125,15 @@ var App;
             function _setupConnEvents(conn) {
                 _endExistingConnections();
                 existingConn = conn;
+                // when either you or the other ends the conn
+                //conn.on("data", this.scope.messagehandler);
+                //conn.on("data", function (data) {
+                //    console.log("Incoming data: ", data);
+                //});
                 conn.on("close", function () {
                     console.log("You have been disconnected from ", existingConn);
                     $rootScope.$emit("connectionEnded", existingConn);
+                    // hang up on any existing connections if present
                     _endExistingConnections();
                 });
                 conn.on("error", function (err) {
@@ -134,17 +143,18 @@ var App;
             }
             var peer = new Peer(store.get("username"), {
                 host: $location.host(), path: "/", port: 3000, debug: 3, config: {
-                    "iceServers": [{ url: stunURL }
+                    "iceServers": [{ url: stunURL } // pass in optional STUN and TURN server for maximum network compatibility
                     ]
                 }
             });
             peer.on("open", function () {
                 _resolvePeer(peer);
             });
+            // receiving a data connection
             peer.on("connection", function (connection) {
                 console.log("Answering a connection!", connection);
-                $rootScope.$emit("peerConnectionReceived", connection);
                 _setupConnEvents(connection);
+                $rootScope.$emit("peerConnectionReceived", connection);
             });
             peer.on("error", function (err) {
                 console.log("ERROR! Couldn\"t connect to given peer");

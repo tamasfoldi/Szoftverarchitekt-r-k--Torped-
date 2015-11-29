@@ -16,6 +16,10 @@ module Controllers {
             this.http = $http;
             this.store = store;
 
+            $scope.$on("$destroy",function(){
+                $scope.peerObject.endConnection();
+            });
+
             socket.on("peer_pool", (data) => {
                 this.onlineUsers = data.length;
                 this.peerIDs = data;
@@ -38,7 +42,6 @@ module Controllers {
             PeerConnect.getPeer().then((peerObject) => {
                 this.scope.peerObject = peerObject;
                 this.peerID = peerObject.peer.id;
-                // $scope.streamReady = true;
                 if (store.get("secret")) {
                     this.secret = store.get("secret");
                 } else {
@@ -75,7 +78,6 @@ module Controllers {
                     $scope.peerDataConnection.on("data", handleMessage);
 
 
-                    $scope.connected = true;
                     $scope.peerError = null;
                     $scope.$apply();
                 });
@@ -83,8 +85,6 @@ module Controllers {
                 $rootScope.$on("connectionEnded", (event, connectionObject) => {
                     console.log("Peer Disconnected!", connectionObject);
                     this.remotePeerID = "";
-
-                    $scope.connected = false;
 
                     $http.post("/peer/endCall", {id: this.peerID, secret: this.secret}).success(function (res) {
                         console.log(res);
@@ -102,7 +102,6 @@ module Controllers {
 
         endConnection() {
             this.scope.peerObject.endConnection();
-            this.scope.connected = false;
         }
 
         connectToRequestedPeer() {
@@ -148,7 +147,6 @@ module Controllers {
                 // attachReceiptListeners();
 
                 this.scope.peerError = null;
-                this.scope.connected = true;
 
                 // create game
                 game = new Game(this.scope.peerDataConnection);
@@ -159,19 +157,6 @@ module Controllers {
 
             this.scope.peerDataConnection.on("error", (err) => {
                 console.log("Failed to connect to given peerID", err);
-            });
-        }
-
-        updatePlayerStats(gameResult:boolean, gameLength:number) {
-            this.http.put('/users/gameStat/' + this.store.get("username"), {
-                gameResult: gameResult,
-                gameLength: gameLength
-            }).success((res) => {
-                console.log("Stats updated ", res);
-
-            }).error((data, status) => {
-                console.log("Failed to update stats ", data, status);
-                this.scope.peerError = data.error;
             });
         }
     }

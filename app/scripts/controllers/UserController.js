@@ -14,6 +14,7 @@ var Controllers;
             }).then(function (user) {
                 _this.user = user.data;
             }, function (err) {
+                // error handling
             });
         }
         UserCtrl.prototype.update = function () {
