@@ -41,6 +41,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/', express.static(path.join(__dirname, '/app/scripts')));
+app.use('/styles', express.static(path.join(__dirname, '/app/styles')));
 app.use('/scripts', express.static(__dirname + '/node_modules/'));
 app.set('views', __dirname + '/app/views');
 

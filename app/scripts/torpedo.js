@@ -284,7 +284,10 @@ var App;
             url: "/login",
             controller: Controllers.LoginCtrl,
             controllerAs: "LoginCtrl",
-            templateUrl: "partials/login.html"
+            templateUrl: "partials/login.html",
+            data: {
+                requiresLogin: true
+            }
         })
             .state("register", {
             url: "/register",
