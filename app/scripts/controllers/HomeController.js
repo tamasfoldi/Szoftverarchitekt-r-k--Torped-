@@ -10,13 +10,21 @@ var Controllers;
             $scope.$on("$destroy", function () {
                 $scope.peerObject.endConnection();
             });
+            $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+                if (toState.name !== "home") {
+                    _this.scope.peerObject.disconnect();
+                }
+                else {
+                    _this.scope.peerObject.reconnect();
+                }
+            });
             socket.on("peer_pool", function (data) {
                 _this.onlineUsers = data.length;
                 _this.peerIDs = data;
             });
-            document.addEventListener('gameOver', function (event) {
+            document.addEventListener("gameOver", function (event) {
                 var _this = this;
-                $http.put('/users/gameStat/' + store.get("username"), {
+                $http.put("/users/gameStat/" + store.get("username"), {
                     gameResult: event.detail.gameResult,
                     gameLength: event.detail.gameLength
                 }).success(function (res) {
@@ -36,7 +44,6 @@ var Controllers;
                     _this.secret = Math.random().toString(36).substring(10);
                     store.set("secret", _this.secret);
                 }
-                // confirm to the server that my peerID is ready to be connected to
                 $http.post("/peer/confirmID", {
                     id: _this.peerID,
                     secret: _this.secret
@@ -55,7 +62,6 @@ var Controllers;
                     console.log("Peer DataConnection received", connection);
                     $scope.peerDataConnection = connection;
                     _this.remotePeerID = connection.peer;
-                    // create game
                     game = new Game(_this.scope.peerDataConnection);
                     $scope.peerDataConnection.on("data", handleMessage);
                     $scope.peerError = null;
@@ -117,7 +123,6 @@ var Controllers;
             this.scope.peerDataConnection.on("open", function () {
                 // attachReceiptListeners();
                 _this.scope.peerError = null;
-                // create game
                 game = new Game(_this.scope.peerDataConnection);
                 _this.scope.peerDataConnection.on("data", handleMessage);
                 _this.scope.$apply();

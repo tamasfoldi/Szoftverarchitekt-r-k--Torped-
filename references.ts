@@ -38,7 +38,10 @@
 // grunt-end
 
 //grunt-start
+/// <reference path="Scripts/typings/angular2/angular2.d.ts" />
+/// <reference path="Scripts/typings/angular2/http.d.ts" />
 /// <reference path="Scripts/typings/es6-promise/es6-promise.d.ts" />
+/// <reference path="Scripts/typings/es6-shim/es6-shim.d.ts" />
 /// <reference path="Scripts/typings/peerjs/peerjs.d.ts" />
 /// <reference path="Scripts/typings/webrtc/MediaStream.d.ts" />
 /// <reference path="Scripts/typings/webrtc/RTCPeerConnection.d.ts" />

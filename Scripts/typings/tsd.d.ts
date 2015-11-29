@@ -22,3 +22,6 @@
 /// <reference path="webrtc/MediaStream.d.ts" />
 /// <reference path="webrtc/RTCPeerConnection.d.ts" />
 /// <reference path="jqueryui/jqueryui.d.ts" />
+/// <reference path="angular2/angular2.d.ts" />
+/// <reference path="angular2/http.d.ts" />
+/// <reference path="es6-shim/es6-shim.d.ts" />

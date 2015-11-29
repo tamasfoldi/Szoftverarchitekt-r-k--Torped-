@@ -26,15 +26,22 @@ var Controllers;
             this.store = store;
             $scope.$on("$destroy", function () {
                 $scope.peerObject.endConnection();
-                $scope.peerObject.peer.disconnect();
+            });
+            $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+                if (toState.name !== "home") {
+                    _this.scope.peerObject.disconnect();
+                }
+                else {
+                    _this.scope.peerObject.reconnect();
+                }
             });
             socket.on("peer_pool", function (data) {
                 _this.onlineUsers = data.length;
                 _this.peerIDs = data;
             });
-            document.addEventListener('gameOver', function (event) {
+            document.addEventListener("gameOver", function (event) {
                 var _this = this;
-                $http.put('/users/gameStat/' + store.get("username"), {
+                $http.put("/users/gameStat/" + store.get("username"), {
                     gameResult: event.detail.gameResult,
                     gameLength: event.detail.gameLength
                 }).success(function (res) {
@@ -369,6 +376,12 @@ var App;
                     },
                     endConnection: function () {
                         _endExistingConnections();
+                    },
+                    disconnect: function () {
+                        peer.disconnect();
+                    },
+                    reconnect: function () {
+                        peer.reconnect();
                     }
                 };
                 deferred.resolve(peerObject);

@@ -2,7 +2,7 @@
 module App {
     angular.module("torpedo", ["angular-jwt", "angular-storage", "ui.router", "LocalStorageModule", "permission", "ngMaterial", "focus-if", "ngMessages", "btford.socket-io"])
         .config(($urlRouterProvider: angular.ui.IUrlRouterProvider, jwtInterceptorProvider: angular.jwt.IJwtInterceptor, $httpProvider: angular.IHttpProvider,
-                 $stateProvider: angular.ui.IStateProvider) => {
+            $stateProvider: angular.ui.IStateProvider) => {
             $stateProvider
                 .state("home", {
                     url: "/",
@@ -42,14 +42,14 @@ module App {
 
             $httpProvider.interceptors.push(($rootScope, $q, store: angular.a0.storage.IStoreService) => {
                 return {
-                    request: function (config) {
+                    request: function(config) {
                         config.headers = config.headers || {};
                         if (localStorage.getItem("jwt") !== null) {
                             config.headers["Authorization"] = "Bearer " + localStorage.getItem("jwt").substring(1, localStorage.getItem("jwt").length - 1);
                         }
                         return config;
                     },
-                    response: function (response) {
+                    response: function(response) {
                         if (response.status === 401) {
                             // todo handle the case where the user is not authenticated
                         }
@@ -60,7 +60,7 @@ module App {
         })
 
         .run(($rootScope: angular.IRootScopeService, $state: angular.ui.IStateService, store: angular.a0.storage.IStoreService, jwtHelper: angular.jwt.IJwtHelper) => {
-            $rootScope.$on("$stateChangeStart", function (e, to) {
+            $rootScope.$on("$stateChangeStart", function(e, to) {
                 if (to.data && to.data.requiresLogin) {
                     if (!store.get("jwt") || jwtHelper.isTokenExpired(store.get("jwt"))) {
                         e.preventDefault();
@@ -69,7 +69,7 @@ module App {
                 }
             });
         })
-        .run((jwtHelper:  angular.jwt.IJwtHelper, store: angular.a0.storage.IStoreService, Permission, $state: angular.ui.IStateService) => {
+        .run((jwtHelper: angular.jwt.IJwtHelper, store: angular.a0.storage.IStoreService, Permission, $state: angular.ui.IStateService) => {
             Permission.defineRole("user", ($stateParams: angular.ui.IStateParamsService) => {
                 var user = jwtHelper.decodeToken(store.get("jwt"));
                 if ($stateParams["username"] === user["username"]) {
@@ -107,7 +107,7 @@ module App {
                         peer: peer,
 
                         // connects to the given remotePeerId -- returns a DataConnection object
-                        makeConnection: function (remotePeerId) {
+                        makeConnection: function(remotePeerId) {
 
                             console.log("Initiating a data connection to: ", remotePeerId);
 
@@ -118,13 +118,22 @@ module App {
                         },
 
                         // closes the existing call and connection
-                        endConnection: function () {
+                        endConnection: function() {
                             _endExistingConnections();
+                        },
+
+                        disconnect: () => {
+                            peer.disconnect();
+                        },
+
+                        reconnect: () => {
+                            peer.reconnect();
                         }
                     };
 
                     deferred.resolve(peerObject);
                 }
+
 
                 function _endExistingConnections() {
                     if (existingConn) {
@@ -137,12 +146,12 @@ module App {
                     _endExistingConnections();
                     existingConn = conn;
                     // when either you or the other ends the conn
-                    //conn.on("data", this.scope.messagehandler);
-                    //conn.on("data", function (data) {
+                    // conn.on("data", this.scope.messagehandler);
+                    // conn.on("data", function (data) {
                     //    console.log("Incoming data: ", data);
-                    //});
+                    // });
 
-                    conn.on("close", function () {
+                    conn.on("close", function() {
                         console.log("You have been disconnected from ", existingConn);
                         $rootScope.$emit("connectionEnded", existingConn);
 
@@ -150,7 +159,7 @@ module App {
                         _endExistingConnections();
                     });
 
-                    conn.on("error", function (err) {
+                    conn.on("error", function(err) {
                         console.log("Connection Error: ", err);
                         _endExistingConnections();
                     });
@@ -158,30 +167,30 @@ module App {
 
                 var peer = new Peer(store.get("username"), {
                     host: $location.host(), path: "/", port: 3000, debug: 3, config: {
-                        "iceServers": [{url: stunURL} // pass in optional STUN and TURN server for maximum network compatibility
+                        "iceServers": [{ url: stunURL } // pass in optional STUN and TURN server for maximum network compatibility
                         ]
                     }
                 });
 
-                peer.on("open", function () {
+                peer.on("open", function() {
                     _resolvePeer(peer);
                 });
 
                 // receiving a data connection
-                peer.on("connection", function (connection) {
+                peer.on("connection", function(connection) {
                     console.log("Answering a connection!", connection);
                     _setupConnEvents(connection);
                     $rootScope.$emit("peerConnectionReceived", connection);
                 });
 
-                peer.on("error", function (err) {
+                peer.on("error", function(err) {
                     console.log("ERROR! Couldn\"t connect to given peer");
 
                     $rootScope.$emit("connectFailed", err);
                 });
 
                 return {
-                    getPeer: function () {
+                    getPeer: function() {
                         return deferred.promise;
                     }
                 };

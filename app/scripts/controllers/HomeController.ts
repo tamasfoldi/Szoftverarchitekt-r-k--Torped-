@@ -2,22 +2,30 @@
 
 module Controllers {
     export class HomeCtrl {
-        http:angular.IHttpService;
+        http: angular.IHttpService;
         scope;
-        private secret:string;
-        private peerID:string;
-        private remotePeerID:string;
-        private onlineUsers:number;
+        private secret: string;
+        private peerID: string;
+        private remotePeerID: string;
+        private onlineUsers: number;
         private peerIDs;
         private store;
 
-        constructor($http:angular.IHttpService, store:angular.a0.storage.IStoreService, PeerConnect, $scope, $rootScope, socket) {
+        constructor($http: angular.IHttpService, store: angular.a0.storage.IStoreService, PeerConnect, $scope, $rootScope, socket) {
             this.scope = $scope;
             this.http = $http;
             this.store = store;
 
-            $scope.$on("$destroy",function(){
+            $scope.$on("$destroy", () => {
                 $scope.peerObject.endConnection();
+            });
+
+            $rootScope.$on("$stateChangeStart", (event, toState, toParams, fromState, fromParams) => {
+                if (toState.name !== "home") {
+                    this.scope.peerObject.disconnect();
+                } else {
+                    this.scope.peerObject.reconnect();
+                }
             });
 
             socket.on("peer_pool", (data) => {
@@ -25,8 +33,8 @@ module Controllers {
                 this.peerIDs = data;
             });
 
-            document.addEventListener('gameOver', function (event:CustomEvent) {
-                $http.put('/users/gameStat/' + store.get("username"), {
+            document.addEventListener("gameOver", function(event: CustomEvent) {
+                $http.put("/users/gameStat/" + store.get("username"), {
                     gameResult: event.detail.gameResult,
                     gameLength: event.detail.gameLength
                 }).success((res) => {
@@ -86,7 +94,7 @@ module Controllers {
                     console.log("Peer Disconnected!", connectionObject);
                     this.remotePeerID = "";
 
-                    $http.post("/peer/endCall", {id: this.peerID, secret: this.secret}).success(function (res) {
+                    $http.post("/peer/endCall", { id: this.peerID, secret: this.secret }).success(function(res) {
                         console.log(res);
                         this.remotePeerID = null;
 
