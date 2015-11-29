@@ -1,30 +1,33 @@
 <div class="home">
   <div>
-    <h1>Game</h1>
+    <md-toolbar class="md-theme-indigo">
+      <h2 class="md-toolbar-tools">
+        <span>Game</span>
+      </h2>
+    </md-toolbar>
     <div>
-      <h2>My information</h2>
-      Peer Id: {{ HomeCtrl.peerID }}<br>
-      Secret: {{ HomeCtrl.secret }}
+      <h2>My information</h2> Peer Id: {{ HomeCtrl.peerID }}
+      <br> Secret: {{ HomeCtrl.secret }}
     </div>
     <div>
       <div ng-if="!HomeCtrl.remotePeerID">
-      <h2>Connect to other players</h2>
-      <button ng-click="HomeCtrl.connectToRandomPeer()">Play with Random Peer</button>
-          <h3> Connected players:</h3>
+        <h2>Connect to other players</h2>
+        <button ng-click="HomeCtrl.connectToRandomPeer()">Play with Random Peer</button>
+        <h3> Connected players:</h3>
         <ul>
-            <li ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id">{{id}}
-                <button ng-click="HomeCtrl.remotePeerID = id; HomeCtrl.connectToRequestedPeer()">Play!</button>
-            </li>
+          <li ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id">{{id}}
+            <button ng-click="HomeCtrl.remotePeerID = id; HomeCtrl.connectToRequestedPeer()">Play!</button>
+          </li>
         </ul>
       </div>
       <div ng-if="HomeCtrl.remotePeerID">
-          <h2>Connected!</h2>
-          <h3>Connected to: {{ HomeCtrl.remotePeerID }}</h3>
-          <button ng-click="HomeCtrl.endConnection()">Disconnect</button>
+        <h2>Connected!</h2>
+        <h3>Connected to: {{ HomeCtrl.remotePeerID }}</h3>
+        <button ng-click="HomeCtrl.endConnection()">Disconnect</button>
       </div>
     </div>
     <h4>Online users: {{HomeCtrl.onlineUsers}}</h4>
   </div>
-    <div id="game">
-    </div>
+  <div id="game">
+  </div>
 </div>
