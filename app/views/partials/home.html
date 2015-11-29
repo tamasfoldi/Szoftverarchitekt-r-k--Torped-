@@ -7,14 +7,14 @@
     </md-toolbar>
     <md-content>
       <div ng-if="!HomeCtrl.remotePeerID && HomeCtrl.onlineUsers > 1">
-        <h2>Connect to other players (available: {{HomeCtrl.onlineUsers -1 }})</h2>
-        <h3> Connected players:</h3>
-        <ul>
-          <li ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id">{{id}}
-            <md-button class="md-raised" ng-click="HomeCtrl.remotePeerID = id; HomeCtrl.connectToRequestedPeer()">Play!</md-button>
-          </li>
-        </ul>
-        <md-button class="md-raised" ng-click="HomeCtrl.connectToRandomPeer()">Play with Random Peer</md-button>
+        <!--<h3>Connect to other players (available: {{HomeCtrl.onlineUsers -1 }})</h3>-->
+        <md-button class="md-raised md-primary" ng-click="HomeCtrl.connectToRandomPeer()">Play with Random Enemy</md-button>
+        <h3> Connected:  {{HomeCtrl.onlineUsers -1 }} player</h3>
+        <md-list>
+          <md-list-item ng-repeat="id in HomeCtrl.peerIDs" ng-if="HomeCtrl.peerID!=id" md->{{id}}
+            <md-button class="md-primary" ng-click="HomeCtrl.remotePeerID = id; HomeCtrl.connectToRequestedPeer()">Play!</md-button>
+          </md-list-item>
+        </md-list>
       </div>
       <div ng-if="!HomeCtrl.remotePeerID && HomeCtrl.onlineUsers <= 1">
         <h2>Sorry, there are no available users!</h2>

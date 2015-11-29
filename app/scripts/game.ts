@@ -435,10 +435,10 @@ class Game {
     }
 
     public updateStatus(msg:string) {
-        //$("#status").text(msg);
-        $("#status").slideUp('fast', function () {  // Slide out the old text
-            $(this).text(msg).slideDown('fast');  // Then slide in the new text
-        });
+        $("#status").text(msg);
+        //$("#status").slideUp('fast', function () {  // Slide out the old text
+        //    $(this).text(msg).slideDown('fast');  // Then slide in the new text
+        //});
     }
 
     public getToken() {

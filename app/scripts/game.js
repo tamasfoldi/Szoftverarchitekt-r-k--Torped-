@@ -379,9 +379,7 @@ var Game = (function () {
         }
     };
     Game.prototype.updateStatus = function (msg) {
-        $("#status").slideUp('fast', function () {
-            $(this).text(msg).slideDown('fast');
-        });
+        $("#status").text(msg);
     };
     Game.prototype.getToken = function () {
         this.myBoard.playerTurn = false;
