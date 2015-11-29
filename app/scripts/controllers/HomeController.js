@@ -13,7 +13,6 @@ var Controllers;
             PeerConnect.getPeer().then(function (peerObject) {
                 _this.scope.peerObject = peerObject;
                 _this.peerID = peerObject.peer.id;
-                // $scope.streamReady = true;
                 if (store.get("secret")) {
                     _this.secret = store.get("secret");
                 }
@@ -21,7 +20,6 @@ var Controllers;
                     _this.secret = Math.random().toString(36).substring(10);
                     store.set("secret", _this.secret);
                 }
-                // confirm to the server that my peerID is ready to be connected to
                 $http.post("/peer/confirmID", {
                     id: _this.peerID,
                     secret: _this.secret
@@ -31,8 +29,6 @@ var Controllers;
                     console.log("Failed ", data, status);
                     $scope.peerError = data.error;
                 });
-                // setup local game listeners so that we can send our events
-                // attachLocalListeners();
                 $rootScope.$on("connectFailed", function (event, error) {
                     console.log("Connection failed: ", error, error.message);
                     $scope.peerError = error.message;
@@ -41,7 +37,6 @@ var Controllers;
                 $rootScope.$on("peerConnectionReceived", function (event, connection) {
                     console.log("Peer DataConnection received", connection);
                     $scope.peerDataConnection = connection;
-                    // attachReceiptListeners();
                     $scope.connected = true;
                     _this.remotePeerID = connection.peer;
                     $scope.peerError = null;
@@ -104,12 +99,8 @@ var Controllers;
             this.scope.peerDataConnection = peerObject.makeConnection(this.remotePeerID);
             this.scope.peerDataConnection.on("open", function () {
                 // attachReceiptListeners();
-                _this.scope.peerDataConnection.on("data", function (data) {
-                    console.log("Incoming data: ", data);
-                });
                 _this.scope.peerError = null;
                 _this.scope.connected = true;
-                // gameBtn.click();
                 _this.scope.$apply();
             });
             this.scope.peerDataConnection.on("error", function (err) {
@@ -117,7 +108,8 @@ var Controllers;
             });
         };
         HomeCtrl.prototype.sendHi = function () {
-            this.scope.peerDataConnection.send("Hi!");
+            console.log("Sendhi: ", this.scope.peerDataConnection);
+            this.scope.peerDataConnection.send("Hi2!");
         };
         return HomeCtrl;
     })();

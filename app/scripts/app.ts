@@ -136,6 +136,10 @@ module App {
                     _endExistingConnections();
                     existingConn = conn;
                     // when either you or the other ends the conn
+                    conn.on("data", function (data) {
+                        console.log("Incoming data: ", data);
+                    });
+
                     conn.on("close", function () {
                         console.log("You have been disconnected from ", existingConn);
                         $rootScope.$emit("connectionEnded", existingConn);

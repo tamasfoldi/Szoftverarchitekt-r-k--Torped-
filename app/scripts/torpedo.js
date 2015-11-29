@@ -115,9 +115,7 @@ var Controllers;
             var _this = this;
             this.scope.peerDataConnection = peerObject.makeConnection(this.remotePeerID);
             this.scope.peerDataConnection.on("open", function () {
-                _this.scope.peerDataConnection.on("data", function (data) {
-                    console.log("Incoming data: ", data);
-                });
+                // attachReceiptListeners();
                 _this.scope.peerError = null;
                 _this.scope.connected = true;
                 _this.scope.$apply();
@@ -127,7 +125,8 @@ var Controllers;
             });
         };
         HomeCtrl.prototype.sendHi = function () {
-            this.scope.peerDataConnection.send("Hi!");
+            console.log("Sendhi: ", this.scope.peerDataConnection);
+            this.scope.peerDataConnection.send("Hi2!");
         };
         return HomeCtrl;
     })();
@@ -369,6 +368,9 @@ var App;
             function _setupConnEvents(conn) {
                 _endExistingConnections();
                 existingConn = conn;
+                conn.on("data", function (data) {
+                    console.log("Incoming data: ", data);
+                });
                 conn.on("close", function () {
                     console.log("You have been disconnected from ", existingConn);
                     $rootScope.$emit("connectionEnded", existingConn);

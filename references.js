@@ -34,10 +34,8 @@
 /// <reference path="lib/config/database.ts" />
 /// <reference path="lib/models/userSchema.ts" />
 // grunt-end
-//grunt-start
 /// <reference path="Scripts/typings/es6-promise/es6-promise.d.ts" />
 /// <reference path="Scripts/typings/peerjs/peerjs.d.ts" />
 /// <reference path="Scripts/typings/webrtc/MediaStream.d.ts" />
 /// <reference path="Scripts/typings/webrtc/RTCPeerConnection.d.ts" />
-//grunt-end 
 //# sourceMappingURL=references.js.map

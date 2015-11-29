@@ -131,10 +131,6 @@ module Controllers {
 
             this.scope.peerDataConnection.on("open", () => {
                 // attachReceiptListeners();
-                this.scope.peerDataConnection.on("data", function (data) {
-                    console.log("Incoming data: ", data);
-                });
-
 
                 this.scope.peerError = null;
                 this.scope.connected = true;
@@ -149,7 +145,8 @@ module Controllers {
         }
 
         sendHi() {
-            this.scope.peerDataConnection.send("Hi!");
+            console.log("Sendhi: ", this.scope.peerDataConnection);
+            this.scope.peerDataConnection.send("Hi2!");
         }
     }
 }
